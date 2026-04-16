@@ -20,6 +20,7 @@ This repo is a complete AI toolkit for dental. Every skill is a standalone promp
 | Referral Coordination Letter | Generate a professional specialist referral letter that summarizes the patient's clinical history, reason for referral, relevant findings, and any time-sensitive details — ensuring a smooth handoff between the general dentist and the specialist. | ~10 min/referral |
 | Social Media Content Calendar | Generate a full month's social media content calendar for a dental practice, including post topics, captions, hashtags, and posting schedule across platforms (Instagram, Facebook, Google Business Profile). | ~30 min/month |
 | Treatment Case Presentation Script | Turn a diagnosed treatment plan into a structured, empathetic patient-facing case presentation that covers the "why now," procedure overview, expected outcomes, total investment, financing options, and a confident close — in language the patient will actually understand. | ~15 min/case |
+| After-Hours Emergency Triage Protocol | Produce a standardized dental emergency triage script and decision tree for after-hours patient calls, messages, and chat inquiries. | ~10 min/call + improved liability posture |
 | New Patient Welcome Kit | Generate a complete new patient welcome package — including a welcome email, pre-visit instructions, what-to-expect guide, and office information sheet — so every new patient arrives informed, prepared, and confident in their choice of practice. | ~20 min/patient |
 | Patient Reactivation Sequence | Generate a multi-channel reactivation campaign aimed at **lapsed patients** — people who have gone 12+ months without an appointment, have stopped responding to normal recall messages, or have unscheduled diagnosed treatment from a previous plan. | ~45 min/campaign |
 | Post-Op Care Instructions | Generate personalized, patient-friendly aftercare instructions for any dental procedure, including recovery timelines, do's-and-don'ts, medication guidance, and red-flag symptoms that warrant a callback. | ~10 min/patient |
@@ -29,11 +30,13 @@ This repo is a complete AI toolkit for dental. Every skill is a standalone promp
 | Chart Audit Prep Checklist | Generate a chart-by-chart audit readiness checklist for dental records under review by an insurance carrier, a state dental board, a DSO compliance team, or a defense attorney preparing for litigation. | ~30 min/chart |
 | Insurance Denial Appeal Letter | Draft a professional, persuasive appeal letter when a dental insurance claim is denied, citing clinical evidence, CDT codes, and medical necessity to support reconsideration. | ~20 min/letter |
 | Insurance Verification Summary | Turn a raw insurance breakdown (from a portal dump, a verification call recording, or a faxed EOB) into a standardized, one-page quick-reference summary the front desk, TC, and clinical team can actually read in 30 seconds. | ~20 min/patient |
-| Email Drafter | Turn rough notes into a professional email matching your company's voice and tone. | ~10 min/use |
-| Meeting Summarizer | Summarize meeting notes into action items, decisions, and follow-ups. | ~10 min/use |
-| Review Responder | Craft professional responses to online reviews — both positive and negative. | ~10 min/use |
+| Monthly Practice KPI Report | Turn raw practice-management exports (Dentrix, Eaglesoft, Open Dental, Curve, Denticon, Carestack, Dentrix Ascend) into a one-page monthly KPI narrative that an owner-dentist, office manager, or DSO regional director can read in five minutes and act on. | ~90 min/month |
+| Pre-Authorization Narrative Writer | Draft carrier-ready pre-authorization (a.k.a. | ~15 min/narrative |
+| Email Drafter (Dental) | Draft HIPAA-appropriate, on-brand dental-practice emails for the most common scenarios a front office, TC, or provider sends during the week — appointment confirmations, pre-op prep, post-op follow-ups, insurance-benefits clarifications, balance reminders, referral thank-yous, new-patient welcomes, birthday/milestone notes, and recall / reactivation outreach. | ~10 min/email |
+| Meeting Summarizer (Dental) | Turn raw meeting notes, transcripts, or recordings into a structured, decision-focused summary tailored to the meeting types a dental practice actually runs — morning huddle, treatment-planning / case review, staff meeting, provider 1:1, CE lunch-and-learn, OSHA or HIPAA training, lab / vendor meeting, DSO regional review, or merger / partnership conversation. | ~15 min/meeting |
+| Review Responder (Dental) | Draft HIPAA-compliant public responses to online dental reviews — Google, Yelp, Healthgrades, RateMDs, Zocdoc, Facebook, Nextdoor — and produce a parallel private outreach when escalation is warranted. | ~15 min/review |
 
-**Total time saved per use: ~363+ minutes across all skills.**
+**Total time saved per use: ~488+ minutes across all skills.**
 
 ## Quick Start
 
