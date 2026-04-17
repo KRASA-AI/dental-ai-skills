@@ -18,6 +18,8 @@ This repo is a complete AI toolkit for dental. Every skill is a standalone promp
 | Lab Prescription Drafter | Draft a complete, unambiguous lab prescription (Rx / work authorization) for fixed, removable, or implant prosthetics so the dental laboratory receives every detail it needs on the first submission — shade, material, tooth number(s), margin design, occlusal scheme, pontic design, due date, and any patient-specific notes. | ~8 min/case |
 | Morning Huddle Brief | Generate a focused, standard-format morning huddle brief that the doctor, hygienist, front desk, and assistants can all follow in 10 minutes — covering the day's production goal, patient-by-patient schedule review, same-day treatment opportunities, medical alerts, lab cases, new patients, unscheduled treatment in today's patients, and yesterday's carry-overs. | ~15 min/day |
 | Referral Coordination Letter | Generate a professional specialist referral letter that summarizes the patient's clinical history, reason for referral, relevant findings, and any time-sensitive details — ensuring a smooth handoff between the general dentist and the specialist. | ~10 min/referral |
+| Scheduling Optimizer & No-Show Playbook | Generate a customized scheduling optimization playbook for a dental practice — including appointment-type templates with ideal durations and sequencing rules, same-day cancellation fill protocols, no-show reduction strategies with reminder sequences, waitlist management workflows, and provider-specific block scheduling guidelines. | ~25 min/week |
+| Financial Counseling Workflow | Generate a complete financial counseling package for patients who have received a treatment presentation but have not yet accepted — particularly for plans exceeding $2,500 where cost is the primary barrier. | ~20 min/case |
 | Social Media Content Calendar | Generate a full month's social media content calendar for a dental practice, including post topics, captions, hashtags, and posting schedule across platforms (Instagram, Facebook, Google Business Profile). | ~30 min/month |
 | Treatment Case Presentation Script | Turn a diagnosed treatment plan into a structured, empathetic patient-facing case presentation that covers the "why now," procedure overview, expected outcomes, total investment, financing options, and a confident close — in language the patient will actually understand. | ~15 min/case |
 | After-Hours Emergency Triage Protocol | Produce a standardized dental emergency triage script and decision tree for after-hours patient calls, messages, and chat inquiries. | ~10 min/call + improved liability posture |
@@ -36,7 +38,7 @@ This repo is a complete AI toolkit for dental. Every skill is a standalone promp
 | Meeting Summarizer (Dental) | Turn raw meeting notes, transcripts, or recordings into a structured, decision-focused summary tailored to the meeting types a dental practice actually runs — morning huddle, treatment-planning / case review, staff meeting, provider 1:1, CE lunch-and-learn, OSHA or HIPAA training, lab / vendor meeting, DSO regional review, or merger / partnership conversation. | ~15 min/meeting |
 | Review Responder (Dental) | Draft HIPAA-compliant public responses to online dental reviews — Google, Yelp, Healthgrades, RateMDs, Zocdoc, Facebook, Nextdoor — and produce a parallel private outreach when escalation is warranted. | ~15 min/review |
 
-**Total time saved per use: ~488+ minutes across all skills.**
+**Total time saved per use: ~533+ minutes across all skills.**
 
 ## Quick Start
 
