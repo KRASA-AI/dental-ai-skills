@@ -44,6 +44,18 @@ Emerging 2026 guidance — from the British Dental Journal, the Journal of Medic
 
 The 2026 HIPAA Security Rule updates (mandatory encryption, MFA, accelerated breach notification) apply to any practice using AI tools that touch patient data. See `knowledge-base/best-practices/phi-safe-prompting.md` for the prompt-hygiene implications.
 
+## ADA Position on AI in Claims Adjudication and Prior Authorization (April 2026)
+
+In its March 27, 2026 comments on the CMS Comprehensive Regulations To Uncover Suspicious Healthcare (CRUSH) initiative — published on the ADA news site in early April 2026 — the ADA took an explicit position that AI should not be used as the sole basis for claim denials or prior-authorization decisions affecting dental providers. The ADA framed this around two concerns specific to dentistry: first, dental claims data are structured for benefit administration and are not well-suited for medical-necessity determination or fraud detection; second, dental data systems are fragmented and lack standardized formats, which degrades the training data that any AI adjudication model would rely on. The ADA also urged that CMS require independent validation of AI tools used in the claims pipeline.
+
+**Practice-level implications for the repo:**
+
+- When a denied claim shows signals of AI-only adjudication (identical boilerplate language across unrelated claims, denials that do not reference any specific clinical fact from the submitted documentation, suspiciously fast turnaround), the appeal letter can cite the ADA's April 2026 position on AI adjudication as part of the case for human review of the denial. The `insurance-denial-appeal` skill should be aware of this option, though citation is optional and case-specific.
+- The `pre-auth-narrative-writer` skill should continue to prioritize narratives that are specific, clinically anchored, and radiograph-referenced — the harder the narrative is to dismiss on auto-review, the more likely it is to reach a human adjudicator in an AI-heavy pipeline.
+- Practices with DSO or corporate affiliations should check whether their carrier contracts include (or lack) an AI-escalation clause that guarantees human review of denials above a dollar threshold; this is becoming a negotiated contract term.
+
+This position is advocacy, not law — CMS has not adopted it in a final rule as of April 2026 — but it is the clearest official ADA statement to date on AI in claims adjudication and is useful context in appeal correspondence.
+
 ## Cross-References
 
 - `skills/admin/informed-consent-drafter.md` — AI Disclosure section implements the consent guidance described above
@@ -59,6 +71,7 @@ The 2026 HIPAA Security Rule updates (mandatory encryption, MFA, accelerated bre
 2. Will the ADA or a state board publish model consent language specifically for AI-assisted diagnostics, or will this remain a practice-level drafting exercise (as the `informed-consent-drafter` skill currently assumes)?
 3. How will payers adapt pre-authorization and audit workflows when AI analysis is part of the supporting documentation?
 4. Will subsequent parts of the ANSI/ADA 1110 series cover CBCT and 3D printing workflows?
+5. Will CMS incorporate the ADA's "no AI-only denials" position into the final CRUSH rule, and if so will that framework propagate to private dental carriers?
 
 ---
 
