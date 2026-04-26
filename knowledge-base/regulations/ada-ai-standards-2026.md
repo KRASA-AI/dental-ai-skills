@@ -42,7 +42,7 @@ Emerging 2026 guidance — from the British Dental Journal, the Journal of Medic
 
 ## HIPAA Security Rule 2026 Updates
 
-The 2026 HIPAA Security Rule updates (mandatory encryption, MFA, accelerated breach notification) apply to any practice using AI tools that touch patient data. See `knowledge-base/best-practices/phi-safe-prompting.md` for the prompt-hygiene implications.
+The 2026 HIPAA Security Rule updates (mandatory encryption, MFA, accelerated 72-hour incident reporting, annual penetration testing, stronger BA oversight) apply to any practice using AI tools that touch patient data. The expected mid-2026 final-rule publication and the approximately 180-day compliance window make this an immediate planning item, not a future consideration. See the dedicated `knowledge-base/regulations/hipaa-security-rule-2026.md` note for the proposed-rule provisions, the Breach Notification Rule overlay, state-law stack-on, and the cross-references to the new `cybersecurity-incident-response-plan` skill. See `knowledge-base/best-practices/phi-safe-prompting.md` for the prompt-hygiene implications when AI tools are part of the affected environment.
 
 ## ADA Position on AI in Claims Adjudication and Prior Authorization (April 2026)
 
@@ -61,7 +61,9 @@ This position is advocacy, not law — CMS has not adopted it in a final rule as
 - `skills/admin/informed-consent-drafter.md` — AI Disclosure section implements the consent guidance described above
 - `skills/admin/chart-audit-prep.md` — Documentation standards that AI-assisted findings must meet
 - `skills/admin/pre-auth-narrative-writer.md` — Carrier narrative standards for codes supported by AI analysis
+- `skills/admin/cybersecurity-incident-response-plan.md` — Operational IRP, hour-zero runbook, communication templates, post-incident bundle
 - `skills/operations/clinical-note-assistant.md` — Note language conventions for AI-assisted findings
+- `knowledge-base/regulations/hipaa-security-rule-2026.md` — 2026 Security Rule update, Breach Notification Rule, state-law stack-on, dental-specific 2026 threat patterns
 - `knowledge-base/best-practices/phi-safe-prompting.md` — Prompt hygiene for PHI-adjacent workflows
 - `knowledge-base/tools-ecosystem/ai-phone-receptionists.md` — Adjacent vendor ecosystem; BAA and data residency apply identically
 

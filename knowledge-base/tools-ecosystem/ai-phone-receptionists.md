@@ -6,7 +6,7 @@ A landscape note maintained by the landscape-monitor. These are third-party vend
 
 An AI phone receptionist is a voice + SMS agent that answers inbound calls 24/7, books/reschedules/cancels directly against the PMS calendar, fills cancellation slots from a waitlist, handles new-patient intake (name, DOB, insurance, chief complaint), and routes dental emergencies per a configured triage decision tree.
 
-## Active vendors (as of 2026-04-24)
+## Active vendors (as of 2026-04-25)
 
 - **Arini** — Dental AI receptionist, voice + SMS, PMS integrations. Positioned as "Sophie from Arini Dental." Emphasizes 24/7 scheduling + emergency triage.
 - **Viva AI** — Positions as a full AI operating system for dental practices (receptionist + outbound recall/reactivation campaigns), multilingual in 100+ languages with automatic detection.
@@ -45,9 +45,10 @@ An AI phone receptionist is a voice + SMS agent that answers inbound calls 24/7,
 Separate from phone receptionists but often confused with them. The ambient-scribe category has consolidated rapidly through 2026-Q1–Q2 and now has several production-scale entrants:
 
 - **Pearl Voice (April 2026 launch)** — Ambient voice AI suite for the operatory. Multi-speaker ambient transcription, voice-enabled perio charting in real time, procedure-specific templates. Early adopters reporting ~60 min/day/provider time savings.
-- **Videa Voice Notes (launched October 2025; enterprise deployments expanding April 2026)** — First AI-powered ambient scribe purpose-built for dentistry per VideaHealth. Smart Ambient Mode (multi-speaker) and Quick Dictation Mode (free-form speech), SOAP-structured output. Enterprise deployment at Emergency Dental of America (April 2026) demonstrates DSO-scale adoption. Vendor claims ~10 hrs/provider/week savings, up to ~$117K annual revenue per dentist, 95% first-pass completion.
+- **Videa Voice Notes (launched October 2025; enterprise deployments expanding April 2026)** — First AI-powered ambient scribe purpose-built for dentistry. Smart Ambient Mode (multi-speaker) and Quick Dictation Mode (free-form speech), SOAP-structured output. Enterprise deployment at Emergency Dental of America (April 2026) demonstrates DSO-scale adoption. Vendor claims ~10 hrs/provider/week savings, up to ~$117K annual revenue per dentist, 95% first-pass completion. (See "VideaHealth → Videa rebrand" under Notable 2026 partnerships and enterprise deployments below.)
 - **Overjet Voice (April 2026 global GA)** — Voice-powered clinical documentation; Overjet acquired DentalBee to accelerate this capability and brought it to general availability. Now paired in-product with Overjet's imaging AI.
 - **Bola AI** — Voice Perio and Voice Restorative structured voice-command charting plus ambient AI Scribe. Vendor claims 10,000+ users and 3M+ charts completed. Verified Dentrix partnership, authorized Eaglesoft integration, bridge integration with Open Dental. Also announced Voice Perio integrations with Open Dental and Dentrix Enterprise.
+- **Heidi (Heidi Health)** — Cross-vertical clinical AI scribe with a dental template library. April 2026: signed a two-year partnership with **PortmanDentex (UK + Ireland's second-largest dental group)** to deploy across the network, with approximately 60 clinicians going live each month. Specialty-specific notes and letters with clinician review-and-finalize workflow. Strong UK and Ireland presence; growing US dental footprint via DeepCura's "Best AI Scribe for Dentists" rankings.
 - **Denti.AI Voice Perio** — Hands-free periodontal charting, speaker diarization in real time, writes to Dentrix, Eaglesoft, or Open Dental.
 - **DentScribe** — Patent-pending AI Voice Perio Charting (PR Newswire April 2026).
 - **Dentrix Ascend Voice** — Voice dictation integrated natively into Dentrix Ascend.
@@ -61,9 +62,15 @@ These are in-operatory documentation tools and integrate with `clinical-note-ass
 - **Imagen Dental Partners × Overjet (April 2026)** — Exclusive AI partnership across Imagen's 120+ locations in 17 states. Scale signal: DSOs are starting to standardize on a single imaging-AI vendor rather than piloting multiple.
 - **Mortenson Dental Partners × Overjet IRIS (2026)** — 147 practices; ~1M patients annually.
 - **Dental Care Alliance × Overjet (2026)** — Historic rollout of AI.
-- **Emergency Dental of America × VideaHealth Voice Notes (April 2026)** — Network-wide voice-scribe deployment.
+- **North American Dental Group × Overjet Voice (January 2026)** — 216 locations in 15 states.
+- **TD Dental and Multi-Specialty Holdings × Overjet (2026)** — Complete AI suite across 34 locations.
+- **Emergency Dental of America × Videa Voice Notes (April 2026)** — Network-wide voice-scribe deployment.
+- **PortmanDentex × Heidi (April 2026)** — Two-year partnership; UK/Ireland's second-largest dental group; ~60 clinicians per month going live following a 2025 pilot. Largest dental ambient-scribe deployment in UK and Ireland to date.
+- **Heartland Dental × DentalXChange (April 21, 2026)** — Eligibility AI plus PortalPass credential management across 1,900+ supported locations in 38 states and DC. Phased rollout starting April. Distinct adjacent category (eligibility AI / RCM, not ambient scribe), but a parallel DSO-scale deployment signal worth tracking.
+- **VideaHealth → Videa rebrand and private-practice expansion (April 21, 2026)** — VideaHealth, the dental imaging AI vendor with deployments at 90,000 clinicians and 8 of the 10 largest DSOs, rebranded to "Videa" and announced expansion to independent and private-practice owners. Vendor-line capabilities now position as Clinical Assist (diagnostics, citing 20% case-acceptance lift), Auto-Documentation (cited 1–2 hrs/clinician/day), Insights (real-time performance), AutoVerify (insurance verification), and Clean Claims (cited 50% denial reduction). Practice-level implication: a previously enterprise-only AI suite is now a procurement option for single-location and small-group buyers, expanding the vendor shortlist for non-DSO practices evaluating an integrated AI stack.
+- **Pearl Second Opinion 3D FDA clearance (April 22, 2026)** — Pearl became the first dental AI company with FDA clearance for both 2D and 3D image analysis. Adjacent imaging-AI signal — not an operational change for prompt-based skills, but expands the integrated-imaging-AI vendor shortlist relevant to BAA and 510(k) due diligence per `regulations/ada-ai-standards-2026.md`.
 
-These deployments matter for the repo because they signal the DSO category is moving past pilot into production. Skills that depend on provider workflow (pre-visit intake summary, clinical-note assistant, morning huddle brief) should assume AI-scribe output is increasingly the default upstream input, not a future consideration.
+These deployments matter for the repo because they signal the DSO category is moving past pilot into production AND that previously enterprise-only AI suites (Videa) are now opening to independent practices. Skills that depend on provider workflow (pre-visit intake summary, clinical-note assistant, morning huddle brief) should assume AI-scribe output is increasingly the default upstream input, not a future consideration. The eligibility-AI category (DentalXChange, HOOTL, Toothy AI, Curve Eligibility+, Ventus AI, DentalRobot, mConsent) is on track for a dedicated tools-ecosystem note in a future cycle as category consolidation settles.
 
 ---
 
