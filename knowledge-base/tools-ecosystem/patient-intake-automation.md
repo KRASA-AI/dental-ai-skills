@@ -14,7 +14,7 @@ Three operational sub-categories — practices typically choose one or combine t
 2. **Dental-specific intake-first products** — Built primarily around the intake/check-in experience with deeper PMS write-back and conditional logic. Examples: Intake.Dental, QuantumByte, Yapi, Adit (intake module).
 3. **PMS-native intake modules** — Forms shipped inside the PMS itself (lower switching cost, narrower feature set). Examples: Dentrix Patient Engage forms, Open Dental built-in eForms, Curve forms, Eaglesoft forms.
 
-## Active vendors (as of 2026-04-26)
+## Active vendors (as of 2026-04-28)
 
 Communication-suite vendors with a digital-forms module:
 
@@ -25,6 +25,7 @@ Communication-suite vendors with a digital-forms module:
 - **Modento** — Communication suite with paperless office and intake forms; widely used in independent practices.
 - **Doctible** — Patient experience platform with digital intake.
 - **Lighthouse 360 (Yapi acquisition merger)** — Patient communication with intake.
+- **Dental Intelligence (Engagement Suite)** — Communication-and-scheduling suite that bundles Digital Forms with Online Scheduling, Appointment Reminders, TouchPoints, Team Tasks, Team Chat, Online Reviews, Kiosks, and Payments. Practice-analytics roots (the original Dental Intelligence product line) mean the engagement layer ships alongside production-and-retention dashboards rather than as a standalone forms tool. **Supported PMS list expanded April 27, 2026 to add Denticon (Planet DDS)** alongside its existing PMS coverage — closing a gap that previously left DSO buyers on Denticon without a first-party Dental Intelligence engagement integration. The form module participates in the same channel-delivery, conditional-logic, e-signature, and PMS write-back patterns documented below; the differentiator is that completed-form data feeds directly into the same analytics surface a practice already uses for production-per-provider, hygiene-reappointment, and case-acceptance reporting.
 
 Dental-specific intake-first vendors:
 
@@ -98,4 +99,4 @@ This is the pattern that shows up consistently in 2026 implementation guidance r
 
 ---
 
-*This file is maintained by the landscape-monitor scheduled task. Vendor names, pricing, and capabilities change frequently; verify current state before recommending a specific vendor to a practice. First created 2026-04-26 in response to the April 26 ai.dentist Weave-vs-Solutionreach implementation guide and the renewed 2026 vendor-landscape coverage of dental-specific intake-first products (Intake.Dental, QuantumByte) that prompted moving this category from incidental to ecosystem-worthy.*
+*This file is maintained by the landscape-monitor scheduled task. Vendor names, pricing, and capabilities change frequently; verify current state before recommending a specific vendor to a practice. First created 2026-04-26 in response to the April 26 ai.dentist Weave-vs-Solutionreach implementation guide and the renewed 2026 vendor-landscape coverage of dental-specific intake-first products (Intake.Dental, QuantumByte) that prompted moving this category from incidental to ecosystem-worthy. Vendor list updated 2026-04-28 to add Dental Intelligence (Engagement Suite) following the April 27, 2026 announcement that the Engagement Suite is now fully integrated with Denticon (Planet DDS).*
