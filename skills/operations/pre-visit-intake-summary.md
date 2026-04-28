@@ -16,6 +16,8 @@ Convert a completed patient intake form (new-patient or recall-update) into a co
 
 This is a workflow companion to `morning-huddle-brief` (which covers the day's agenda and production goals) and `clinical-note-assistant` (which covers the treatment-visit note). The pre-visit summary sits between intake and the morning huddle, and between intake and the provider's pre-op review.
 
+The intake **pipeline itself** (vendor selection, channel delivery, conditional logic, PMS write-back, downtime fallback, multilingual variants) is upstream of this skill and out of scope here. See `knowledge-base/tools-ecosystem/patient-intake-automation.md` for the vendor-landscape and design-pattern reference; this skill consumes the completed form content regardless of which vendor produced it.
+
 ## When to Use
 
 Use this skill when:

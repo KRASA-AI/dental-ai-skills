@@ -6,7 +6,7 @@ A landscape note maintained by the landscape-monitor. These are third-party vend
 
 An AI phone receptionist is a voice + SMS agent that answers inbound calls 24/7, books/reschedules/cancels directly against the PMS calendar, fills cancellation slots from a waitlist, handles new-patient intake (name, DOB, insurance, chief complaint), and routes dental emergencies per a configured triage decision tree.
 
-## Active vendors (as of 2026-04-25)
+## Active vendors (as of 2026-04-27)
 
 - **Arini** — Dental AI receptionist, voice + SMS, PMS integrations. Positioned as "Sophie from Arini Dental." Emphasizes 24/7 scheduling + emergency triage.
 - **Viva AI** — Positions as a full AI operating system for dental practices (receptionist + outbound recall/reactivation campaigns), multilingual in 100+ languages with automatic detection.
@@ -48,6 +48,7 @@ Separate from phone receptionists but often confused with them. The ambient-scri
 - **Videa Voice Notes (launched October 2025; enterprise deployments expanding April 2026)** — First AI-powered ambient scribe purpose-built for dentistry. Smart Ambient Mode (multi-speaker) and Quick Dictation Mode (free-form speech), SOAP-structured output. Enterprise deployment at Emergency Dental of America (April 2026) demonstrates DSO-scale adoption. Vendor claims ~10 hrs/provider/week savings, up to ~$117K annual revenue per dentist, 95% first-pass completion. (See "VideaHealth → Videa rebrand" under Notable 2026 partnerships and enterprise deployments below.)
 - **Overjet Voice (April 2026 global GA)** — Voice-powered clinical documentation; Overjet acquired DentalBee to accelerate this capability and brought it to general availability. Now paired in-product with Overjet's imaging AI.
 - **Bola AI** — Voice Perio and Voice Restorative structured voice-command charting plus ambient AI Scribe. Vendor claims 10,000+ users and 3M+ charts completed. Verified Dentrix partnership, authorized Eaglesoft integration, bridge integration with Open Dental. Also announced Voice Perio integrations with Open Dental and Dentrix Enterprise.
+- **Planet DDS Clinical Voice+ Suite (Denticon-native)** — Native voice-charting suite inside Denticon, the DSO-focused cloud PMS. **AI Voice Perio** launched February 2026 (positioned as "consistent, scalable perio charting" for DSOs), **AI Voice Restorative Charting** added April 2, 2026 (decay, existing restorations, fractures, and treatment-plan entries during the restorative exam). Both modes share the same voice-capture model and governance controls within Denticon, eliminating the dedicated chairside scribe role for single-clinician documentation. Roadmap: AI Voice Treatment Plan and AI Ambient Voice signaled for later in 2026 across the DentalOS platform. Differentiator vs. third-party voice-scribe vendors: native PMS write-back without a bridge or middleware layer.
 - **Heidi (Heidi Health)** — Cross-vertical clinical AI scribe with a dental template library. April 2026: signed a two-year partnership with **PortmanDentex (UK + Ireland's second-largest dental group)** to deploy across the network, with approximately 60 clinicians going live each month. Specialty-specific notes and letters with clinician review-and-finalize workflow. Strong UK and Ireland presence; growing US dental footprint via DeepCura's "Best AI Scribe for Dentists" rankings.
 - **Denti.AI Voice Perio** — Hands-free periodontal charting, speaker diarization in real time, writes to Dentrix, Eaglesoft, or Open Dental.
 - **DentScribe** — Patent-pending AI Voice Perio Charting (PR Newswire April 2026).
@@ -71,6 +72,10 @@ These are in-operatory documentation tools and integrate with `clinical-note-ass
 - **Pearl Second Opinion 3D FDA clearance (April 22, 2026)** — Pearl became the first dental AI company with FDA clearance for both 2D and 3D image analysis. Adjacent imaging-AI signal — not an operational change for prompt-based skills, but expands the integrated-imaging-AI vendor shortlist relevant to BAA and 510(k) due diligence per `regulations/ada-ai-standards-2026.md`.
 
 These deployments matter for the repo because they signal the DSO category is moving past pilot into production AND that previously enterprise-only AI suites (Videa) are now opening to independent practices. Skills that depend on provider workflow (pre-visit intake summary, clinical-note assistant, morning huddle brief) should assume AI-scribe output is increasingly the default upstream input, not a future consideration. The eligibility-AI category (DentalXChange, HOOTL, Toothy AI, Curve Eligibility+, Ventus AI, DentalRobot, mConsent) is on track for a dedicated tools-ecosystem note in a future cycle as category consolidation settles.
+
+## Adjacent category — patient intake automation
+
+Patient intake automation (Weave, Solutionreach, NexHealth, Modento, Intake.Dental, RevenueWell, plus PMS-native form modules) often dispatches via the same SMS rails as the receptionist agent — the agent confirms the booking, the intake link arrives in the same thread minutes later. See `knowledge-base/tools-ecosystem/patient-intake-automation.md` for the vendor-landscape, design patterns, and implementation playbook for this adjacent category. The eligibility-AI handoff (insurance card photo capture in the intake form triggering an AutoVerify / Curve Eligibility+ / DentalXChange Eligibility AI / HOOTL workflow) is the clearest cross-category integration point.
 
 ---
 
