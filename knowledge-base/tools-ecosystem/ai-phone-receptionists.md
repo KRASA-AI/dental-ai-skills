@@ -6,7 +6,7 @@ A landscape note maintained by the landscape-monitor. These are third-party vend
 
 An AI phone receptionist is a voice + SMS agent that answers inbound calls 24/7, books/reschedules/cancels directly against the PMS calendar, fills cancellation slots from a waitlist, handles new-patient intake (name, DOB, insurance, chief complaint), and routes dental emergencies per a configured triage decision tree.
 
-## Active vendors (as of 2026-04-27)
+## Active vendors (as of 2026-05-06)
 
 - **Arini** — Dental AI receptionist, voice + SMS, PMS integrations. Positioned as "Sophie from Arini Dental." Emphasizes 24/7 scheduling + emergency triage.
 - **Viva AI** — Positions as a full AI operating system for dental practices (receptionist + outbound recall/reactivation campaigns), multilingual in 100+ languages with automatic detection.
@@ -21,6 +21,8 @@ An AI phone receptionist is a voice + SMS agent that answers inbound calls 24/7,
 - **Rondah AI** — AI receptionist for dental practices.
 - **JustCall** — General-purpose AI voice agent with dental vertical packaging.
 - **AgentZap / aireceptionistdental.com / Aira** — Additional entrants surfaced in 2026 category roundups.
+- **Aron** — Originally launched February 20, 2026 as an AI-powered marketing/growth platform for dental practices. Late-April / early-May 2026 platform expansion adds AI Receptionist (24/7 inbound capture, after-hours coverage), Insurance Verification, and Patient Recall (re-engaging inactive patients with automated cadence) — repositioning Aron as a vertical-stack front-office suite rather than a marketing-only tool. Differentiator vs. pure receptionist vendors: bundles inbound-call handling with the marketing-and-acquisition layer that drives the inbound calls in the first place; the same patient record flows from first ad click through booking, intake, recall.
+- **JAZA** — AI-powered front office operating system positioned as the standard-setting layer that "replaces manual, inconsistent work with automated structure" across multi-location practices. Conversation AI learns each practice and its individual patients (scheduling preferences, communication styles, appointment behaviors, motivators). After more than a year of live deployment across the United States and Puerto Rico, JAZA opened applications for an exclusive Partner Advisory Program (program start: June 1, 2026) offering selected operators 12 weeks of complete-platform access at no cost, white-glove onboarding, weekly strategic sessions with leadership, early access to new features, and direct input into product development. Differentiator: positions itself as the cross-location standardization layer, not an interchangeable receptionist; the Partner Advisory Program is a category-defining play to set front-office standards before category consolidation locks in.
 
 ## How this repo interacts with these tools
 
