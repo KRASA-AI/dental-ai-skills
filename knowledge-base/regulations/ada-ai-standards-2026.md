@@ -31,7 +31,7 @@ The 2026 CDT reference cycle incorporates the new ANSI/ADA standards as part of 
 AI diagnostic tools used for clinical decisions must be 510(k) cleared (or otherwise FDA-authorized) for the stated clinical intent. Practices evaluating an AI vendor should request:
 
 - Current 510(k) clearance letter and the specific indications cleared
-- Whether the tool is cleared for the imaging modality used in the practice (e.g., 2D bitewings vs. CBCT)
+- Whether the tool is cleared for the imaging modality used in the practice (e.g., 2D bitewings vs. CBCT). **Milestone — May 2026:** The first FDA clearance for a CBCT-specific AI diagnostic tool has been issued — Dentsply Sirona Smart View – Detect (cleared for periapical radiolucency / PARL detection in CBCT; available May 12, 2026 on Orthophos S/SL and Axeos with a DS Core Standard or Advanced subscription). Clinical study: ~46% relative increase in PARL detection sensitivity vs. unaided CBCT review with no meaningful false-positive increase. Prior cleared dental AI tools have been limited to 2D radiographs; this is the first CBCT clearance. Practices evaluating CBCT AI should now treat the specific 510(k) clearance number and modality scope as a threshold diligence question. Also closes part of ANSI/ADA 1110-1 Open Question #4 (CBCT coverage in the standard series) by establishing a market precedent ahead of any standard update.
 - Post-market surveillance and adverse-event reporting procedures
 - HIPAA Business Associate Agreement, data residency, and training-data policy
 - Whether patient data is used for continued model training (and the opt-out mechanism if so)
@@ -72,7 +72,7 @@ This position is advocacy, not law — CMS has not adopted it in a final rule as
 1. Which state will be first to mandate AI-specific CE hours, and what will the hour count and content look like?
 2. Will the ADA or a state board publish model consent language specifically for AI-assisted diagnostics, or will this remain a practice-level drafting exercise (as the `informed-consent-drafter` skill currently assumes)?
 3. How will payers adapt pre-authorization and audit workflows when AI analysis is part of the supporting documentation?
-4. Will subsequent parts of the ANSI/ADA 1110 series cover CBCT and 3D printing workflows?
+4. Will subsequent parts of the ANSI/ADA 1110 series cover CBCT and 3D printing workflows? **Update (May 2026):** Dentsply Sirona Smart View – Detect received the first FDA clearance for a CBCT-specific dental AI diagnostic tool (PARL detection, May 4, 2026). The market has moved ahead of the standard on CBCT coverage; track whether the ADA Standards Committee on Dental Informatics accelerates the CBCT part of the 1110 series in response.
 5. Will CMS incorporate the ADA's "no AI-only denials" position into the final CRUSH rule, and if so will that framework propagate to private dental carriers?
 
 ---

@@ -12,7 +12,7 @@ last_eval_score: null
 
 ## Purpose
 
-Turn shorthand procedure notes, voice-to-text dictations, ambient AI-scribe drafts, or bullet-point summaries into properly formatted chart-ready clinical entries using SOAP structure, correct dental terminology, tooth numbering, surface notation, and CDT/ICD-10 documentation standards. v3.0 ships **8 procedure-family templates** with prefilled section anchors; **PMS-specific paste-in formats** for the seven major US dental PMSs (Dentrix / Eaglesoft / Open Dental / Curve / Denticon / Carestack / Dentrix Ascend); **ambient-voice vendor pass-through normalization** for the major dental AI-scribe stacks (Pearl Voice / Videa / Bola AI / Heidi / Denti.AI Voice Perio / DentScribe / Dentrix Ascend Voice / Alta AI / SoapnotesAI / Planet DDS Clinical Voice+ Suite); and an **audit-defensibility checklist** so every note can stand up to an insurance audit, peer review, or medicolegal request.
+Turn shorthand procedure notes, voice-to-text dictations, ambient AI-scribe drafts, or bullet-point summaries into properly formatted chart-ready clinical entries using SOAP structure, correct dental terminology, tooth numbering, surface notation, and CDT/ICD-10 documentation standards. v3.0 ships **8 procedure-family templates** with prefilled section anchors; **PMS-specific paste-in formats** for the seven major US dental PMSs (Dentrix / Eaglesoft / Open Dental / Curve / Denticon / Carestack / Dentrix Ascend); **ambient-voice vendor pass-through normalization** for the major dental AI-scribe stacks (Pearl Voice / Videa / Bola AI / Heidi / Denti.AI Voice Perio / DentScribe / Dentrix Ascend Voice / Alta AI / SoapnotesAI / Planet DDS Clinical Voice+ Suite / Archy Scribe); and an **audit-defensibility checklist** so every note can stand up to an insurance audit, peer review, or medicolegal request.
 
 ## When to Use
 
@@ -38,7 +38,7 @@ Provide:
 2. **Procedure family** (if not obvious from notes) — Restorative / endodontic / periodontal / surgical / prosthodontic / orthodontic / pediatric / hygiene / exam-only-or-consult
 3. **Tooth numbering system** (optional) — Universal (1–32, default in US), FDI / ISO 3950 (international), or Palmer (some specialty contexts). Default is Universal if not specified
 4. **PMS target** (optional) — Dentrix / Eaglesoft / Open Dental / Curve / Denticon / Carestack / Dentrix Ascend / other. Drives the paste-in format. Default is generic SOAP if not specified
-5. **AI-scribe vendor** (optional, if input came from one) — Pearl Voice / Videa / Bola AI / Heidi / Denti.AI Voice Perio / DentScribe / Dentrix Ascend Voice / Alta AI / SoapnotesAI / Planet DDS Clinical Voice+ Suite. Drives the vendor-quirk normalization pass
+5. **AI-scribe vendor** (optional, if input came from one) — Pearl Voice / Videa / Bola AI / Heidi / Denti.AI Voice Perio / DentScribe / Dentrix Ascend Voice / Alta AI / SoapnotesAI / Planet DDS Clinical Voice+ Suite / Archy Scribe. Drives the vendor-quirk normalization pass
 6. **Specific requirements** (optional) — Whether to include CDT codes inline, ICD-10 codes inline, the practice's note-template merge fields, time-stamping, the provider's signature block, audit-mode (full-defensibility checklist run)
 
 ## Instructions
@@ -145,6 +145,7 @@ When the input is an AI-scribe draft, run the vendor-specific normalization pass
 - **Alta AI:** Hygiene + restorative; verify oral-cancer-screening findings are explicit per anatomic site, not just "WNL" without listing the sites.
 - **SoapnotesAI:** General SOAP shell; verify that the procedure-family required fields are present (the shell can be too generic).
 - **Planet DDS Clinical Voice+ Suite (AI Voice Perio + AI Voice Restorative Charting):** Native to Denticon; same as Dentrix Ascend Voice — paste-in is automatic but verify required-field anchors. Differentiator vs. third-party voice-scribes: native PMS write-back without a bridge or middleware layer.
+- **Archy Scribe (launched May 2026):** Native to Archy PMS only. Because Archy Scribe draws directly on the patient's existing chart, treatment history, planned procedures, and medical history, draft notes may incorporate context that the provider did not verbalize during the encounter — verify that all findings in the output were actually observed or discussed, not inferred from prior chart data. SOAP structure and custom template auto-population are strengths; confirm perio-charting depth notation follows the practice's M-D vs. D-M convention. Scribe output is the first in the planned Archy Intelligence agent suite; future Archy Revenue / Verify / Connect outputs will share the same patient-record substrate.
 
 For **all** AI-scribe inputs, run a final hallucination pass: any procedure, material, anesthetic, prescription, or finding that the scribe documented but the provider did not say must be flagged for the provider's review before paste-in. AI scribes are a documentation accelerator, not a clinical decision-maker.
 
