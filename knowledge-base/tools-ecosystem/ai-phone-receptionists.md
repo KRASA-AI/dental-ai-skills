@@ -6,12 +6,12 @@ A landscape note maintained by the landscape-monitor. These are third-party vend
 
 An AI phone receptionist is a voice + SMS agent that answers inbound calls 24/7, books/reschedules/cancels directly against the PMS calendar, fills cancellation slots from a waitlist, handles new-patient intake (name, DOB, insurance, chief complaint), and routes dental emergencies per a configured triage decision tree.
 
-## Active vendors (as of 2026-05-11)
+## Active vendors (as of 2026-05-25)
 
 - **Arini** — Dental AI receptionist, voice + SMS, PMS integrations. Positioned as "Sophie from Arini Dental." Emphasizes 24/7 scheduling + emergency triage.
 - **Viva AI** — Positions as a full AI operating system for dental practices (receptionist + outbound recall/reactivation campaigns), multilingual in 100+ languages with automatic detection.
 - **HeyGent** — Claims training on 700,000+ hours of dental conversations; customizable voice personality; no-code prompt builder.
-- **Patientdesk** — AI booking system for dental practices, focus on booking conversion.
+- **Patientdesk** — AI booking and front-desk system for dental practices. Y Combinator W26 cohort; raised $1M pre-seed (February 2026) led by Y Combinator and E2VC. Reported deployment in 60+ clinics across the US, UK, and Australia at announcement. Differentiator vs. other receptionist vendors: real-time insurance eligibility verification *during* the live patient call (booking + eligibility resolved in the same conversation), instead of collecting insurance details and following up later. Integrates with practice management systems for end-to-end intake (answer call → qualify patient → book appointment → verify insurance → take payment).
 - **Dentina** — AI dental receptionist.
 - **Revenue Ring AI** — AI receptionist marketed on no-hold-time and booking capture.
 - **Savvy Agents** — No-code dental AI phone agent builder.
