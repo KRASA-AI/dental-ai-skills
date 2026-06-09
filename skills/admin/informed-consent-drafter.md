@@ -4,7 +4,7 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/consent"
-version: 1.0
+version: 2.0
 last_eval_score: null
 ---
 
@@ -133,4 +133,45 @@ You are a dental informed-consent drafting AI assistant. Your job is to produce 
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** Procedure D6010 surgical placement of implant body, tooth #30; adult patient, takes apixaban 5 mg BID (cardiologist-managed, A-fib); local anesthetic only; alternatives = 3-unit fixed bridge #29–#31 and no treatment; AI tool = Overjet used for bone-level review, provider confirms; fee on separate financial agreement; Colorado; patient signs with witness for surgery.
+
+---
+
+> ### ⚠️ REVIEW REQUIRED — before patient use
+> - **§4 Risks** — Drafted starting language for implant placement. Confirm against your malpractice carrier's approved implant risk list before circulation.
+> - **§4 Anticoagulation** — Apixaban management plan (continue vs. bridge vs. hold) is a medical decision; confirm with the prescribing cardiologist and document. This form does not specify a hold.
+> - **§7 AI Disclosure** — Verify Overjet's current FDA clearance scope covers the stated use.
+> - **Jurisdiction** — Confirm Colorado Dental Board has no additional mandated consent elements for surgical implant placement.
+> - **Signatories** — Surgical procedure: witness line included. Confirm carrier requires witness (most do for surgery/sedation).
+>
+> *Reading level: Flesch-Kincaid grade 7.6. Do not remove this block.*
+>
+> ---
+>
+> ## INFORMED CONSENT — Dental Implant Placement
+> **Practice:** [config.company.name] · **Provider:** [config.provider], DDS — License [#], NPI [#]
+> **Patient:** _______________  DOB: ______  Chart #: ______  Date: ______
+>
+> **§1 — What is planned.** We recommend placing a dental implant (a small titanium post) in the lower right jaw where your back tooth (tooth #30) is missing. The implant replaces the root. After it heals, a crown is attached on top. Today's appointment covers only the implant placement (CDT D6010). The crown and connector are separate procedures with their own consent.
+>
+> **§2 — Why we recommend it.** The space from your missing tooth lets nearby teeth drift and the jawbone shrink over time. Imaging — including a bone-level review assisted by an AI tool (Overjet) that your provider personally reviewed and agrees with — shows enough bone to support an implant.
+>
+> **§3 — Your other choices.**
+> - **Fixed bridge (#29–#31):** Faster, no surgery, but requires reshaping the two neighboring teeth and does not preserve the jawbone.
+> - **No treatment:** No cost or surgery now, but expect continued bone loss, possible drifting of nearby teeth, and reduced chewing on that side.
+>
+> **§4 — Risks and possible complications.** No procedure is guaranteed. Possible complications include: pain, swelling, and bruising; infection; bleeding (see note below about your blood thinner); injury to the nerve in the lower jaw, which can cause numbness or tingling of the lip, chin, or tongue that is usually temporary but can rarely be lasting; injury to a neighboring tooth; the implant not joining to the bone (failure), which may require removal and a second attempt; and the later possibility of peri-implantitis (gum and bone infection around the implant).
+> *Blood-thinner note:* You take apixaban. Whether to continue or adjust it before surgery is a decision made with your cardiologist; we will follow their guidance and document it before treatment.
+>
+> **§5 — Expected benefits.** A replacement tooth that is expected to restore chewing on that side and help preserve the jawbone. Outcomes are expected but not guaranteed.
+>
+> **§6 — Costs and insurance.** Fees are covered in your separate Financial Agreement. Any insurance estimate is not a guarantee of payment; you are responsible for the balance after your plan processes the claim.
+>
+> **§7 — AI disclosure.** An AI tool (Overjet) highlighted bone-level measurements on your images for your provider's review. Your provider is the decision-maker and personally reviewed and confirmed these findings. You may ask questions about this tool or ask that it not be used in your care.
+>
+> **§8 — Acknowledgment & signatures.** I have read this form (or had it read to me), my questions were answered, and the risks, alternatives, and benefits were discussed with me verbally.
+> Patient/Guardian: __________ Print: ______ Date/Time: ______
+> Witness: __________ Date: ______
+> Provider (confirming the discussion occurred): __________ Date: ______
+
+*Note on the example:* this is an abbreviated illustration. A full run produces complete §4 language for the specific carrier, the verbal-conversation documentation reminder for the clinical note, and an e-signature-formatted version. The "Review Required" block is never omitted.

@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~10 min/new patient"
-version: 1.0
+version: 2.0
 last_eval_score: null
 ---
 
@@ -129,4 +129,45 @@ You are a pre-visit intake summarization AI assistant. Your job is to produce a 
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** Recall patient, annual medical-history update. Intake reports: apixaban 5 mg BID (A-fib, Dr. Lee/cardiology), alendronate 70 mg weekly × 4 yrs (oral, osteoporosis), penicillin allergy (hives), HbA1c 7.8 (May), former smoker. Today: hygiene recall (D4910) + provider exam; chart shows open treatment plan for extraction #18. Provider Dr. Patel, Op 3, 60 min.
+
+---
+
+> ### 🩺 PRE-VISIT SUMMARY — generated 7:42a (intake updated 7:15a)
+> **Pt:** J.M. · Chart #4471 · 58 · she/her  **Provider:** Dr. Patel · **Op 3** · Perio maint + exam · 60 min
+>
+> ### 🔴 MEDICAL ALERT — RED
+> **NO ELECTIVE SURGERY TODAY without review.** Two compounding flags for the open #18 extraction:
+> - **Anticoagulant:** apixaban 5 mg BID (A-fib, Dr. Lee). Any surgical step needs a continue/hold decision from cardiology + documentation. *Today's hygiene visit is non-surgical — proceed; do not initiate the extraction today.*
+> - **Antiresorptive:** alendronate 70 mg weekly, oral, ~4 yrs → **MRONJ-risk consideration** for #18 extraction. Provider to evaluate risk/benefit and consent before any surgical date is set.
+>
+> ### Medical History Signals
+> - **Active:** A-fib; osteoporosis; type 2 diabetes — HbA1c **7.8 (May)**, moderate control, relevant to perio healing.
+> - **Meds:** apixaban 5 mg BID; alendronate 70 mg weekly.
+> - **Allergies:** penicillin → hives. *Avoid amoxicillin/Augmentin; if antibiotic indicated, non-β-lactam (e.g., clindamycin/azithromycin) per provider.*
+> - **Social:** former smoker (quit, per intake) — note for perio risk.
+> - No hospitalizations/ED in last 12 mo reported.
+>
+> ### Dental History Signals
+> - On D4910 perio-maintenance recall (prior active therapy on record — supports D4910).
+> - Chief complaint (verbatim): *"lower left has been sore when I chew."* → correlates with open #18 plan; flag for exam.
+> - No reported anesthesia difficulty or dental anxiety.
+>
+> ### Today-Specific Flags
+> - BP check before perio instrumentation (anticoagulant + diabetes).
+> - Confirm last FMX/BWX date vs. frequency policy before exposing radiographs.
+> - Penicillin allergy → set antibiotic default in chart now.
+> - #18: do NOT schedule the surgical date until (a) cardiology anticoagulation guidance and (b) MRONJ risk/benefit consent are documented.
+>
+> ### Team Prep Checklist
+> - [ ] Pre-med: not indicated by current AHA/ADA criteria on this history — **provider to confirm**.
+> - [ ] Physician clearance letter for #18 extraction — request from Dr. Lee; **not yet on file**.
+> - [ ] BP cuff ready in Op 3.
+> - [ ] Perio-maintenance setup.
+>
+> ### ⚑ Verify with provider (inferred/abbreviated)
+> - HbA1c value read from free-text intake — confirm against labs.
+> - "Former smoker" — confirm quit date for perio risk staging.
+> - Alendronate duration (~4 yrs) approximate — confirm for MRONJ risk tier.
+
+*Note on the example:* the summary surfaces and routes signals — it does not decide. Every clinical action is phrased as "provider to confirm/evaluate," the PMS banner remains the source of truth, and inferred items are listed for verification.

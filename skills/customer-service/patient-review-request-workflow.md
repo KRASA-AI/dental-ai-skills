@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~40 min/setup + ongoing"
-version: 1.0
+version: 2.0
 last_eval_score: null
 ---
 
@@ -112,4 +112,42 @@ You are a dental patient-communication AI assistant. Your job is to deliver a fu
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** SMS via Weave (BAA on file), email via PMS; grow Google first, Healthgrades second; Spanish needed (~20% of base); triggers = new-patient exam (provider-signed) + hygiene recall (front-desk-signed); exclude emergency/unresolved-pain visits; bilingual market.
+
+---
+
+> ### Trigger Matrix (at a glance)
+>
+> | Trigger | Lag | Channel | Signed by | Link target |
+> |---|---|---|---|---|
+> | New-patient exam (completed) | 3 hr | SMS | Dr. [name] | Google → internal feedback |
+> | Hygiene recall (completed) | 3 hr | SMS | Front desk | Google → internal feedback |
+> | *Emergency / pain unresolved* | — | **EXCLUDED** | — | route to OM callback |
+>
+> ### Message Copy — New-Patient Exam (SMS, provider-signed, EN)
+> > Hi [First] — Dr. [Name] here. It was great meeting you today at [Practice]! If you have a moment, we'd love your honest feedback: [Google link]. Prefer to reach us directly? Just reply to this text. Reply STOP to opt out. *(149 chars w/o link)*
+>
+> ### Same message — ES
+> > Hola [First], soy la Dra. [Name] de [Practice]. ¡Fue un gusto conocerle hoy! Si tiene un momento, nos encantaría su opinión sincera: [Google link]. ¿Prefiere contactarnos directamente? Responda a este mensaje. Responda STOP para cancelar.
+>
+> ### Hygiene Recall (SMS, front-desk-signed, EN)
+> > Hi [First] — thanks for coming in today! It's always nice to see you at [Practice]. If you'd share a quick review, here's the link: [Google link]. Have feedback for us instead? Just reply here. Reply STOP to opt out.
+>
+> ### Touch 2 (day 7, unopened/no-post — EN)
+> > Hi [First], no pressure at all — if you have 30 seconds, your honest feedback helps our small team a lot: [Google link]. Or reply here anytime. (No further texts about this.) Reply STOP to opt out.
+>
+> *(Touch 2 also produced in ES. No Touch 3 — clock resets at next eligible visit.)*
+>
+> ### Email variant (new-patient, EN excerpt)
+> Subject: *It was great meeting you, [First]!* — body mirrors SMS, adds two buttons ("Leave a Google review" / "Share private feedback"), CAN-SPAM footer with practice address + one-click unsubscribe.
+>
+> ### Clinical-complaint diversion (internal-feedback path)
+> Any reply mentioning pain, a clinical concern, or billing → auto-route to Office Manager queue for **same-business-day callback**. Public link is never the first path for an unhappy patient. Front-desk callback opener: *"Hi [First], this is [Name] from [Practice] — [OM] saw your note and wanted to make this right personally. Tell me what happened."*
+>
+> ### Monthly metrics block (OM runs on the 1st)
+> Requests sent by trigger · link-click rate · post rate (Google + Healthgrades) · star distribution (expect some 4★) · internal-feedback volume + same-day-callback rate · held/excluded count with reason.
+>
+> ### Platform-setup checklist (Weave)
+> Confirm BAA · enable review-request automation · set 3-hr post-appointment trigger by appointment type · suppress excluded types · load Google place ID + Healthgrades URL · verify STOP/opt-out handling is automatic. *(Vendor onboarding builds the actual triggers; configuration differs per platform.)*
+
+*Note on the example:* abbreviated illustration. A full run produces all three A/B drafts per trigger, both languages for every message, and the front-office callback script in full. No procedure names appear in any outbound message (HIPAA), and no review screening or incentives are used.
