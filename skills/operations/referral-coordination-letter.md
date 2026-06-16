@@ -4,8 +4,8 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~12 min/referral"
-version: 2.0
-last_eval_score: null
+version: 3.0
+last_eval_score: 9.50
 ---
 
 # 🔄 Referral Coordination Letter
@@ -183,4 +183,68 @@ You are a dental referral-coordination AI assistant. Your job is to produce a co
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input — try "endodontist referral, #14, irreversible pulpitis with periapical involvement, prior large amalgam with recurrent decay, restorability questionable, urgent" — to see output quality.]
+**Sample input:** "Endodontist referral, #14, irreversible pulpitis with periapical involvement, prior large MOD amalgam with recurrent decay, restorability questionable, **Urgent**. Cold test lingering >30s, positive percussion, PA radiolucency at MB root. Palliative — opened and placed CaOH, patient on amoxicillin 500 mg TID for early cellulitis. Patient: J.R., Delta Dental PPO. GP plans cuspal-coverage crown post-endo if restorable." Template **#1 (Endodontist)**, urgency **Urgent** (verbal call required first).
+
+---
+
+### Artifact 1 — Provider-to-provider letter
+
+> **[PRACTICE LETTERHEAD — NPI, address, phone, fax, secure-email]**
+>
+> **To:** [Endodontist name / practice] · **Date:** [today] · Last visit: [today]
+> **RE:** J.R. · DOB [__/__/____] · Chart #[____] · Delta Dental PPO, Member ID [____] · **🔴 URGENT — verbal call placed [time] to [staff]**
+>
+> **Reason for referral:** J.R. presents with irreversible pulpitis and early periapical involvement on #14 with developing cellulitis. I am requesting **urgent evaluation and endodontic treatment** if the tooth is restorable; please advise on restorability if you assess otherwise.
+>
+> **Clinical findings**
+> - *Clinical:* Lingering cold response >30 sec on #14; positive percussion; localized vestibular swelling, early cellulitis, no fluctuance.
+> - *Radiographic:* Pre-op PA (attached, dated [date]) — periapical radiolucency at the MB root; recurrent decay beneath a large MOD amalgam approximating the pulp.
+> - *Restorability:* Questionable from the GP chair — mesial margin near the crest. Your assessment of restorability before definitive endo is specifically requested.
+>
+> **Working diagnosis:** Irreversible pulpitis with symptomatic apical periodontitis, #14 (ICD-10 **K04.0** / **K04.4**).
+>
+> **What is being sent:** Pre-op PA #14 [date]; bitewing right [date]; intraoral photo of swelling [date]; this letter.
+>
+> **Treatment to date:** Pulp chamber accessed today; calcium hydroxide interim dressing placed for palliation. Started amoxicillin 500 mg TID ×7 days for early cellulitis. Patient advised warm compress, ibuprofen 600 mg q6h PRN with food, and to call us or go to the ED for worsening swelling, fever, or difficulty swallowing/breathing.
+>
+> **Medical history snapshot:** No anticoagulants. No bisphosphonate/denosumab exposure. NKDA. No other flags relevant to endodontic management.
+>
+> **What I'm asking:** Assess restorability and, if favorable, complete endodontic therapy on #14. I plan cuspal-coverage (crown) restoration post-endo if you deem the tooth restorable.
+>
+> **Urgency:** 🔴 Urgent — please see within 48–72 hours. Verbal call already placed. Please return your consultation report within 14 days by secure fax [#] or encrypted email [address]. Daytime line for clinical questions: (___) ___-____.
+>
+> Thank you — [Dr. name, DDS], NPI [____], License [____]
+
+### Artifact 2 — Patient-facing companion letter (7th–8th grade)
+
+> Dear [J.R.],
+>
+> The tooth we treated today (upper left, #14) has an infection in the nerve that needs a root canal specialist called an **endodontist**. We've started you on an antibiotic and placed a medicated dressing to keep you comfortable in the meantime.
+>
+> **Who you'll see:** [Endodontist name] at [practice]. They focus on saving teeth like this one. **Please call them within the next 1–2 days** — this is time-sensitive. We've already spoken with their office.
+>
+> **At the visit:** They'll take an X-ray, check whether the tooth can be saved, and may begin the root canal the same day. Bring your insurance card, ID, and your medication list. We've already sent them your X-rays and records.
+>
+> **Cost:** The endodontist bills separately. We've sent your insurance details so they can verify your benefits; ask their front desk about your estimate.
+>
+> **Until then:** Keep taking your antibiotic exactly as directed, use ibuprofen with food for soreness, and a warm compress on your cheek. **Call us or go to the ER right away** if you get a fever, your face swells more, or it becomes hard to swallow or breathe.
+>
+> We'll check in if you haven't been seen soon. — [Practice]
+
+### Artifact 3 — Attachments inventory
+> PA_#14_[date].jpg · BW_right_[date].jpg · Photo_vestibular-swelling_[date].jpg · Referral-letter_[date].pdf · Insurance-card_front-back.pdf
+
+### Artifact 4 — Insurance bundle
+> Delta Dental PPO · Member ID [____] · Group [____] · Payer ID [____] · Eligibility verified [date], ref #[____] · Annual max remaining: $[____] · Endo + crown frequency OK · Pre-auth: endo typically not pre-authed; crown pre-auth to follow post-endo.
+
+### Artifact 5 — Chart-note paste-in
+> [date] — J.R., #14 irreversible pulpitis w/ apical periodontitis + early cellulitis. Access + CaOH placed; amoxicillin 500 mg TID started. **Urgent** referral to [endodontist]; verbal call placed [time] to [staff]. Sent: PA #14, BW right, swelling photo, letter (secure fax to [#]). Patient given companion letter, verbalized understanding, ED precautions reviewed. Consult report expected ≤14d; loop-closure follow-up set [date+3]. Referral letter v[date].
+
+### Artifact 6 — Loop-closure tracking row
+> | Date | Patient | Destination | Urgency | Expected response | Status | Owner | Close date |
+> |---|---|---|---|---|---|---|---|
+> | [today] | J.R. | [Endodontist] | 🔴 Urgent | [today + 3d] | Sent + verbal | Front-desk coord. | — |
+
+---
+
+**Guardrails demonstrated:** verbal call required and documented *before* the faxed package (urgent case); a **specific clinical question** asked (restorability + treat), not an open-ended "please evaluate"; the GP's crown plan stated as a recommendation, not a directive to the specialist; PHI transmitted only by secure fax with the full letter (fax cover carries minimal identifiers); ED-escalation language mirrors the practice's after-hours triage; loop-closure row created so the referral can't silently fall through.

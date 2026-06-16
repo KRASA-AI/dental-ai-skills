@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~12 min/encounter"
-version: 2.0
-last_eval_score: null
+version: 3.0
+last_eval_score: 9.50
 ---
 
 # 🔢 CDT Code Suggestion Assistant
@@ -115,4 +115,59 @@ You are a dental coding and billing AI assistant with current CDT code knowledge
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** "Tooth #14 — fractured MODL amalgam, recurrent decay undermining the mesiolingual cusp. Excavated to caries-free; MB and ML cusps unsupported, ≥2 walls missing after removal. Placed bonded core build-up, then full-coverage crown prep; monolithic zirconia per lab slip. Same-day visit, GP. Carrier: Delta Dental PPO, in-network, 5-year crown replacement rule, no prior crown on this tooth. ICD-10 pairing requested."
+
+---
+
+> **⚠️ AI-GENERATED CODING SUGGESTION — requires review and sign-off by qualified billing staff or a certified coder (CDC/CPC-D) before submission. Not a billing decision. Verify all carrier rules against the current plan and the current CDT manual. No PHI in this template — apply patient identifiers inside the PMS.**
+
+**Encounter:** Single tooth #14 (Universal), same-day restorative, GP — parses to **2 billable lines.**
+
+---
+
+**LINE 1 — Core build-up**
+
+| Field | Detail |
+|---|---|
+| **Primary CDT** | **D2950** — Core buildup, including any pins when required |
+| **Rationale** | ≥2 axial walls missing after caries removal (MB + ML cusps unsupported); build-up restores structural foundation for the crown. Meets the D2950 standard, not D2949 (restorative foundation) or a base/liner. |
+| **Alternatives considered** | **D2949** (restorative foundation under a restoration) — does NOT meet the missing-wall threshold and is not a substitute for a true build-up; **D2951** (pin retention, per tooth) — only if pins were actually placed (they were not). Selected D2950. |
+| **Supporting narrative** | "After complete caries excavation on #14, the mesiolingual and mesiobuccal cusps were unsupported with two axial walls absent. A bonded core buildup was placed to establish structural retention and resistance form prior to full-coverage crown preparation." |
+| **ICD-10 crosswalk** | **K02.7** (dental root caries) or **K02.9** (dental caries, unspecified) primary; **K08.539** (fractured dental restorative material, unspecified) secondary. |
+| **Bundling flag** | ⚠️ Many carriers (Delta included) **bundle D2950 into the crown** unless the narrative independently justifies it. Submit with the missing-wall narrative attached; do not let it ride silently on the crown line. |
+| **Frequency** | Not frequency-limited, but payable only once per tooth in conjunction with the crown. |
+| **Pre-auth** | No (build-up rarely pre-authed) — but it is the line most often denied as "inclusive." |
+| **Documentation gap** | Chart must explicitly state **"≥2 walls missing after caries removal."** "Pre-crown build-up" alone is the #1 D2950 denial trigger. Add an intraoral photo of the excavated prep if available. |
+| **Downgrade/denial risk** | Bundled-into-crown denial. **Mitigation:** missing-wall language + pre-op photo. |
+
+**LINE 2 — Full-coverage crown**
+
+| Field | Detail |
+|---|---|
+| **Primary CDT** | **D2740** — Crown, porcelain/ceramic |
+| **Rationale** | Monolithic zirconia is an all-ceramic material per the lab slip → D2740. |
+| **Alternatives considered** | **D2750** (porcelain fused to high-noble metal), **D2752** (PFM, noble metal), **D2783** (crown, 3/4 porcelain/ceramic). Selected D2740 — lab slip confirms full-contour monolithic zirconia, no metal substructure. Using a PFM code here would misrepresent the restoration. |
+| **Supporting narrative** | "Tooth #14 presented with a fractured MODL amalgam and recurrent caries undermining two cusps, compromising structural integrity. Full-coverage monolithic zirconia crown placed to restore form, function, and cuspal protection following core buildup. Prior restoration: amalgam, no prior crown on this tooth." |
+| **ICD-10 crosswalk** | **K08.539** (fractured restorative material) primary; **K02.9** secondary. |
+| **Bundling flag** | None beyond the D2950 interaction above. |
+| **Frequency** | ⚠️ **Delta 5-year replacement rule** — confirm no crown paid on #14 in the last 5 years (none on record per input ✓). |
+| **Pre-auth** | Recommended for Delta posterior crowns; confirm threshold. If required → route to `pre-auth-narrative-writer`. |
+| **Documentation gap** | Pre-op radiograph + photo showing the fracture and recurrent decay. Delta wants radiographic evidence of the failed restoration. |
+| **Downgrade/denial risk** | ⚠️ **Delta posterior LEAT/alternate-benefit** is uncommon for crowns but watch for a downgrade if documentation is thin. **Mitigation:** narrative emphasizes cuspal fracture + recurrent caries (not elective). |
+
+---
+
+**CLAIM SUBMISSION CHECKLIST**
+
+- [ ] Pre-op periapical/BW radiograph of #14 attached (shows fracture + recurrent decay)
+- [ ] Post-excavation intraoral photo attached (shows ≥2 missing walls) — defends D2950
+- [ ] D2950 narrative (missing-wall language) in claim narrative box
+- [ ] D2740 narrative (material + reason) in claim narrative box
+- [ ] Lab slip on file confirming monolithic zirconia (material justifies D2740 vs. PFM)
+- [ ] Delta 5-year crown replacement rule verified — no prior crown on #14
+- [ ] Pre-auth status confirmed per plan threshold
+- [ ] Provider NPI, Tax ID, license on claim
+- [ ] ICD-10 (K08.539 / K02.9) paired
+- [ ] Certified coder / billing sign-off before submission
+
+**Most likely failure mode:** D2950 denied as inclusive of the crown. The single highest-value action is the post-excavation photo + explicit "≥2 walls missing" chart language *before* the claim leaves the office.

@@ -4,8 +4,8 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~10 min/patient"
-version: 2.0
-last_eval_score: null
+version: 3.0
+last_eval_score: 9.50
 ---
 
 # 🩹 Post-Op Care Instructions
@@ -159,4 +159,61 @@ You are a dental patient-communication AI assistant. Your job is to produce post
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input — try "implant placement #19 with bone graft, IV sedation, 47-year-old, history of esophageal reflux, no MRONJ exposure, escort = spouse" — to see output quality.]
+**Sample input:** "Implant placement #19 with bone graft (socket preservation done at prior visit; today GBR around fixture), IV sedation, 47-year-old, GERD, no MRONJ exposure, no anticoagulants, NKDA, escort = spouse. Rx: amoxicillin 500 mg TID ×7d (#21), ibuprofen 600 mg q6h PRN (#28), chlorhexidine 0.12% rinse BID. Next visit: 7-day suture/healing check." Base template **#5 (implant + bone graft/GBR)** + **sedation discharge overlay (#15)**.
+
+---
+
+### Channel 1 — Printed handout (patient takes home)
+
+> **[PRACTICE LETTERHEAD] — After-hours: (___) ___-____**
+>
+> **Care Instructions for [First name] — Dental Implant with Bone Graft, Lower Left**
+> *Date: [today] · Keep this where you can find it for the next 2 weeks.*
+>
+> **Right now (next 2 hours)**
+> Go straight home and rest with your head propped up on pillows. Keep the gauze in place with gentle pressure for 30–45 minutes, then remove it. A little oozing (pink saliva) is normal today. Put an ice pack on your cheek — 20 minutes on, 20 minutes off — while you're awake. Because you had IV sedation, your spouse should stay with you for the next 4–6 hours.
+>
+> **Today**
+> Eat only soft, cool foods (yogurt, smoothies *with a spoon, no straw*, mashed potatoes, scrambled eggs). **No straws, no spitting, no smoking** — the suction can disturb the graft and the healing site. Do not rinse or swish today. Take your first ibuprofen with food before the numbness wears off. Take your amoxicillin with food (you have reflux — food and staying upright for 30 minutes after will help).
+>
+> **The next few days**
+> - *Day 1–2:* Start gentle saltwater rinses (½ tsp salt in a cup of warm water) and your chlorhexidine rinse twice a day — let it fall out of your mouth, don't spit hard. Swelling peaks at 48–72 hours; keep using ice the first 24 hours, then switch to warm compresses.
+> - *Day 3–7:* Swelling and soreness ease. Keep the side undisturbed — chew on the other side. Do not press on the area or lift your lip to look at it. **No pressure on the site for 10–14 days** (this is a graft).
+> - Avoid swimming, diving, and hard exercise for 14 days.
+>
+> **Your medications**
+> | Medicine | For | How | Notes |
+> |---|---|---|---|
+> | Amoxicillin 500 mg | Prevent infection | 1 capsule 3× a day, 7 days | Finish all of them. Take with food. May reduce birth-control effectiveness — use a backup method this cycle. |
+> | Ibuprofen 600 mg | Pain + swelling | 1 tablet every 6 hours with food as needed | Take with food (you have reflux). Stop and call us if you get stomach pain. |
+> | Chlorhexidine 0.12% rinse | Keep site clean | Swish gently 2× a day after Day 1 | May temporarily stain teeth; that polishes off later. |
+>
+> **What's normal vs. what's not**
+> | ✅ Expected | 🚩 Call us |
+> |---|---|
+> | Mild oozing today; swelling peaking Day 2–3 | Bleeding you can't control after 45 min of firm pressure |
+> | Soreness controlled by ibuprofen | Pain getting worse after Day 3, or not controlled by medicine |
+> | Bruising on the cheek/jaw | Fever over 101.5°F, or swelling that worsens after Day 3 |
+> | Tasting graft "grittiness" occasionally | Graft material pouring out of the site |
+> | | Numbness in the lip/chin lasting beyond today, or trouble breathing/swallowing → **call now / 911** |
+>
+> **When to call us**
+> Daytime: (___) ___-____ (Mon–Fri __–__). After-hours: **(___) ___-____**. Say: *"I had a lower-left implant with a bone graft on [date] and I'm having [symptom]."*
+>
+> **Your next visit:** 7-day healing & suture check — [date/time]. Bring this sheet.
+>
+> *Written at a 6th-grade reading level for clarity. Please ask if anything is unclear.*
+
+### Channel 2 — Condensed SMS (sent at discharge)
+
+> Hi [First name], it's [Practice]. You had a lower-left implant today. Soft cool foods, **no straws/spitting/smoking**, ice 20 on/20 off, ibuprofen with food. Full instructions are in your email + portal. Spouse should stay with you tonight. Worries? After-hours line: (___) ___-____. Reply STOP to opt out.
+
+*(Email + portal variants carry the full handout above with the wallet-card PDF attached.)*
+
+### Channel 3 — Chart-note paste-in (provider documentation)
+
+> Implant #19 placed with GBR/bone graft under IV sedation; site sutured. NKDA, GERD noted (reflux-aware Rx counseling given). No MRONJ exposure, no anticoagulants. Rx: amoxicillin 500 mg TID ×7d (#21), ibuprofen 600 mg q6h PRN (#28), CHX 0.12% BID. Post-op handout v[date] reviewed verbally + printed + emailed + portal; sedation discharge instructions reviewed. Adult escort: spouse (verified, discharge criteria met). Graft precautions (no pressure ×10–14d, no smoking/straws, sinus N/A — mandibular) reviewed; patient/escort verbalized understanding. Next visit: 7-day healing/suture check.
+
+---
+
+**Guardrails demonstrated:** sedation discharge required a verified adult escort; reflux history drove the "with food + stay upright" medication counseling; NSAID chosen for analgesia (no opioid, no anticoagulant conflict); antibiotic→birth-control note included; SMS carries only the first name + STOP footer (TCPA/HIPAA-safe); no MRONJ overlay applied because exposure was negative — but it would have been added if positive.
