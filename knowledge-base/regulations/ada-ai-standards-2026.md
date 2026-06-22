@@ -56,6 +56,20 @@ In its March 27, 2026 comments on the CMS Comprehensive Regulations To Uncover S
 
 This position is advocacy, not law — CMS has not adopted it in a final rule as of April 2026 — but it is the clearest official ADA statement to date on AI in claims adjudication and is useful context in appeal correspondence.
 
+## Empirical Evidence on LLM Clinical-Reasoning Limits (GlobalDentBench, June 2026)
+
+The "AI is decision support, not a decision" principle that runs through this note now has a hard quantitative anchor specific to dentistry. A multinational dental-reasoning benchmark published in June 2026 (arXiv:2605.24636, GlobalDentBench — directly verified this cycle after being flagged provisional on 2026-06-15) assembled roughly 9,000 expert-validated questions spanning 14 dental disciplines and 88 countries/regions, across three question formats (multiple-choice, short-answer, case-based) and three escalating reasoning levels (knowledge recall → routine reasoning → individualized patient reasoning), with a senior-dentist calibration step reporting expert-agreement rates near 99.98% on factual items and ~96.78% on the harder case-based items.
+
+The headline result is a safety finding, not an accuracy score: when general-purpose large language models were asked to generate clinical recommendations on real dental cases, the study reported an overall *unsafe-recommendation rate of roughly 31%*, with about *4.5% of recommendations carrying a risk of irreversible patient harm*, and the highest unsafe rate concentrated in orthodontics (~44%). The authors' conclusion is that current models behave as supervised knowledge-retrieval aids, not as autonomous clinical agents.
+
+**Why this matters for the repo (concept-only takeaways):**
+
+- It is empirical backing — not just policy preference — for the provider-concurrence documentation standard above ("AI-assisted review confirmed by provider," never "AI diagnosed") and for the mandatory-disclaimer / "what's unknown" guardrails already built into `clinical-evidence-review`, `clinical-note-assistant`, and `treatment-plan-explainer`.
+- The risk is *task-dependent and highest in treatment-planning / individualized-reasoning tasks* (orthodontics being the worst case), which maps directly to the repo's higher-stakes clinical skills. The lower-risk administrative skills (intake summaries, recall sequences, KPI reports) are not implicated by this finding.
+- The numbers are useful, citable framing for patient-facing AI-disclosure language and for staff training on why a clinician must review every AI-generated clinical suggestion — but the benchmark evaluates *general-purpose* LLMs, not FDA-cleared narrow diagnostic devices (e.g., Pearl, Overjet, Dentsply Sirona Smart View), so it should not be cited as evidence about those cleared point-of-care tools.
+
+This is an academic benchmark, not a regulation; it complements rather than replaces the ANSI/ADA 1110 validation-data standard (which governs image-analysis vendors) by quantifying the clinical-reasoning gap for the conversational-LLM layer that the repo's skills sit on top of.
+
 ## Cross-References
 
 - `skills/admin/informed-consent-drafter.md` — AI Disclosure section implements the consent guidance described above
