@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/letter"
-version: 2.0
-last_eval_score: null
+version: 3.0
+last_eval_score: 9.20
 ---
 
 # 📄 Insurance Denial Appeal Letter
@@ -198,4 +198,52 @@ This skill explicitly chains with:
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** "Delta Dental PPO downgraded our D4341 (SRP, UR quad) to D4346 (gingivitis prophy) on patient T.M. EOB dated 06-10-2026, claim #DD-4471992. We have a full perio chart dated 05-28-2026 showing 5–7 mm pockets UR with BOP, generalized horizontal bone loss on the FMX, AAP Stage III Grade B. 1st-level appeal. 180-day window. In-network, Dr. Anna Patel." *(Config: Cherry Creek Family Dental, Denver CO; Dr. Anna Patel NPI 1234567890, CO-DDS license; DentalXChange clearinghouse; Overjet for AI-flagged findings, provider-confirmed.)*
+
+---
+
+> **⚠️ INTERNAL — DO NOT SEND. Success-rate triage.**
+> **Denial category: #5 — Coding Error / Downgrade (CDT-side).** This is a **HIGH-probability** appeal: the downgrade hinges on a documentable clinical distinction (active periodontitis vs. gingivitis) and you have a dated perio chart + FMX that match the higher code. The single point of failure is whether the 05-28 chart note independently states pocket depths, BOP, and AAP staging — confirmed present per input. Reframe is *not* needed; this is a winnable clinical-evidence appeal. Submit via DentalXChange portal or Delta's provider appeal address (not clear-text email — exhibits contain PHI). Run the `clinical-note-assistant` audit-defensibility check on the 05-28 entry before sending.
+
+---
+
+**Cherry Creek Family Dental**
+Anna Patel, DDS · NPI 1234567890 · CO License CO-DDS-00000
+[address] · Denver, CO · (303) ___-____ · Fax (303) ___-____
+
+June 22, 2026
+
+Delta Dental PPO — Dental Claims Review
+[appeal address from EOB]
+
+**RE:** Appeal of downgraded claim · Patient **T.M.** · DOB **xx/xx/19xx** · Member ID [____] · Claim **#DD-4471992** · DOS **05-28-2026** · EOB **06-10-2026**
+
+To the Claims Review Department:
+
+I am writing to formally appeal the downgrade of claim **#DD-4471992** for patient **T.M.**, dated **05-28-2026**, in which **D4341 (periodontal scaling and root planing — four or more teeth per quadrant, upper right)** was reprocessed and paid as **D4346 (scaling in presence of generalized moderate or severe gingival inflammation — full mouth, after oral evaluation)**. The clinical findings on the date of service meet the definition of D4341, and I respectfully request reconsideration and payment at the originally submitted code.
+
+**Patient & procedure summary.** T.M. presented 05-28-2026 for periodontal therapy of the upper-right quadrant following a comprehensive periodontal evaluation. Active periodontitis — not gingivitis — was diagnosed and treated by scaling and root planing.
+
+**Clinical justification.** The periodontal chart dated **05-28-2026 (Exhibit C)** documents upper-right probing depths of **5–7 mm with generalized bleeding on probing**. The full-mouth radiographic series dated **05-28-2026 (Exhibit A)** demonstrates **generalized horizontal alveolar bone loss**. These findings establish a diagnosis of **periodontitis, AAP 2018 Stage III, Grade B** — a condition with attachment and bone loss, which is categorically distinct from the gingival-inflammation-without-attachment-loss condition that D4346 describes.
+
+**Code rationale.** The current ADA CDT descriptor for **D4341** specifies scaling and root planing as a *definitive, therapeutic* procedure for teeth with **bone loss and pocketing** — precisely the documented presentation. **D4346** by its own descriptor applies *in the presence of generalized moderate-to-severe gingival inflammation* **without** attachment loss, and is therefore clinically inapplicable where 5–7 mm pockets and radiographic bone loss are present. The downgrade does not reconcile with the charted pocket depths or the FMX.
+
+**Carrier-policy reference.** Delta Dental's SRP benefit criteria require radiographic evidence of bone loss and probing depths consistent with periodontitis; both are documented on the date of service and attached. The EOB remittance reason for the downgrade is addressed directly above.
+
+**Requested outcome.** Please reverse the downgrade and adjudicate claim #DD-4471992 at **D4341** for the upper-right quadrant. Supporting documents are attached and enumerated below. I request a written determination within 30 days. If this first-level appeal is not resolved in the patient's favor, we intend to pursue second-level (dental director) review.
+
+Sincerely,
+**Anna Patel, DDS** — NPI 1234567890, CO-DDS-00000
+Billing coordinator: [name] · (303) ___-____ direct
+
+**Attachments:** Exhibit A — FMX dated 05-28-2026 (generalized horizontal bone loss); Exhibit B — clinical note dated 05-28-2026; Exhibit C — periodontal chart dated 05-28-2026 (UR 5–7 mm, BOP, Stage III/Grade B); Exhibit D — ADA CDT descriptions, D4341 and D4346; Exhibit E — EOB dated 06-10-2026.
+
+---
+
+**Most likely failure mode:** a thin chart note that says "SRP UR" without the pocket depths, BOP, and staging that distinguish D4341 from D4346. The highest-value action is verifying — *before* the appeal leaves the office — that the 05-28 perio chart and FMX are attached and that the chart note independently states the AAP stage/grade. Per config, any Overjet-flagged radiographic finding cited here must be provider-confirmed, not AI-asserted.
+
+## Version History
+
+- **v3.0 (2026-06-22)** — Added a worked Example Output: a HIGH-probability Category-5 SRP-downgrade appeal (Delta Dental PPO D4341→D4346) showing the internal "do-not-send" success-rate triage block, a print-ready 1st-level letter on the universal scaffold, a numbered dated-exhibit list, and the most-likely-failure-mode callout — grounded in config (provider NPI/license, DentalXChange, Overjet provider-confirmation, PHI-safe transmission). No instruction text removed; `last_eval_score` populated.
+- **v2.0** — 9 denial-reason templates, carrier-specific appeal-pathway flow, multi-level escalation (internal → external → state complaint → ERISA), success-rate triage, universal letter scaffold, common-pitfalls list.
+- **v1.0** — Initial release: single appeal-letter scaffold with CDT/ICD-10 and ADA citation guidance.

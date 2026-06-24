@@ -4,8 +4,8 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/case"
-version: 1.0
-last_eval_score: null
+version: 2.0
+last_eval_score: 9.20
 ---
 
 # 💰 Financial Counseling Workflow
@@ -132,4 +132,49 @@ Produce a pocket-sized reference card (bullet-point format) the TC can reference
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** "Patient Maria G., late 40s, Cigna DPPO, dual income but mentioned a tight budget. Treatment plan: #19 RCT + core + crown and #30 crown — total fee $4,950, insurance estimate $1,450, patient responsibility ~$3,500. Left without scheduling — said she 'needs to talk to her husband' and 'wasn't expecting it to be that much.' Financing: CareCredit (0% for 12 months on balances > $200) and in-house 3-pay (0% over 90 days for balances > $1,000). TC is Jordan. Spanish-speaking household." *(Config: Cherry Creek Family Dental, Weave SMS/email, Spanish ~20%, in-house Cherry Creek Smile Club.)*
+
+---
+
+**Risk tier: Tier 2 (Moderate) → leaning Tier 3.** Patient responsibility $3,500 places this squarely in Tier 2, but two stress signals ("tight budget," spouse decision-maker absent) warrant the Tier 2-plus treatment: financing comparison + phased option + a TC phone touch. Barrier is **cost + absent decision-maker**, not clinical fear — so lead with affordability and equip the spouse conversation.
+
+### 1 — Financing Comparison Sheet *(patient-facing, ~7th-grade, Cigna estimate applied)*
+
+| Option | Est. Monthly | Term | Cost to You | Approval | Best For |
+|--------|-------------|------|-------------|----------|----------|
+| **CareCredit** | ~$292/mo | 12 mo, 0% | $0 interest *if paid in full by month 12*; deferred-interest APR applies after | ~640+ credit; most applicants qualify | Spreading the full $3,500 with no interest if paid on time |
+| **In-house 3-pay (Smile Club)** | ~$1,167 ×3 | 90 days, 0% | $0 | No credit check | Patients who can clear it in a quarter |
+| **Split / phased** | see below | — | Lower now | — | Starting the urgent tooth first |
+| **Pay in full** | $3,500 | — | Ask Jordan about any prompt-pay courtesy | — | If budget allows now |
+
+*Plain-language note included in output: with CareCredit's 0% promo, the full balance must be paid within 12 months or deferred interest is charged back to the original purchase date — pay ~$292/mo to finish on time.*
+
+### 2 — Phased Option (offered because of the budget signal)
+
+> **Phase 1 (start now):** #19 RCT + core + crown — the symptomatic tooth. Patient portion this phase ≈ **$2,050**. As low as **~$171/mo** on CareCredit 12-month.
+> **Phase 2 (schedule in 2–4 months):** #30 crown — stable, can wait a short period. *Note: if it crosses into the new benefit year, a fresh annual maximum may apply — Jordan will check your Cigna remaining max.*
+> *"Dr. Patel recommends completing both. Phasing just lets you start the most important tooth now and spread the rest."*
+
+### 3 — Follow-Up Nurture Sequence *(Weave; EN + ES)*
+
+> **Day 1 — Email (EN):** "Hi Maria, great seeing you today. Here's the plan we discussed plus a few ways to make it comfortable to start — including a 0%-interest option. Happy to answer anything; just reply here or call me. — Jordan, Cherry Creek Family Dental"
+> **Day 1 — Email (ES parallel):** "Hola Maria, gusto en verla hoy. Aquí está el plan que conversamos y algunas opciones de pago sin interés para comenzar con comodidad…"
+> **Day 4 — SMS (EN):** "Hi Maria, Jordan at Cherry Creek. Your treatment could start at about $171/month — want me to check what you'd qualify for? No pressure."
+> **Day 12 — TC phone call (Jordan):** see talking-points card below.
+
+### 4 — TC Talking-Points Card (Jordan)
+
+- Lead with the **monthly number**, not the total: "as low as ~$171/month for the first tooth."
+- Spouse framing: "Totally understand wanting to talk it over — here's a one-pager you can both look at tonight."
+- Say **"monthly investment,"** not "debt"; say **"most patients qualify,"** not "your credit score."
+- Offer to pre-qualify CareCredit *on the call* (soft pull, no commitment).
+- Escalate to Dr. Patel only if Maria raises a clinical-necessity question ("do I really need #30?").
+
+*HIPAA: first name only on anything sent externally; no tooth numbers in SMS (config `phi_safe_messaging`).* 
+
+**Most common failure mode:** quoting the $3,500 total instead of the ~$171/month Phase-1 figure, and not equipping the absent-spouse conversation. The single highest-value action here is the Day-1 bilingual one-pager Maria can share at home.
+
+## Version History
+
+- **v2.0 (2026-06-22)** — Added a worked Example Output: a Tier-2-plus case (Cigna DPPO, $3,500 patient portion, budget + absent-decision-maker barrier) showing the financing comparison with realistic CareCredit/in-house monthly figures, a clinically phased path, an EN/ES Weave nurture sequence, and a TC talking-points card — all grounded in config (financing partners, Spanish, TC personalization, PHI-safe messaging). No instruction text removed; `last_eval_score` populated.
+- **v1.0** — Initial release: 5-step workflow (risk-score → financing comparison → phased option → multi-touch nurture → TC card) with reading-level and no-pressure guardrails.

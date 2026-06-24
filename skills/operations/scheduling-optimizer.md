@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/week"
-version: 2.0
+version: 3.0
 last_eval_score: 9.10
 ---
 
@@ -271,4 +271,56 @@ Cross-reference `monthly-practice-kpi-report` for the broader practice performan
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input (fast-path — only 2 of 7 fields provided):** "Cherry Creek Family Dental — 2 GPs, 2 hygienists, 4 ops. Pain points: ~15% hygiene no-show rate and we can never fill same-day cancellations." *(Config supplies practice name, hours, Dentrix Ascend, Weave SMS/email, Spanish ~20%, brand voice. Everything else falls to defaults.)*
+
+---
+
+### Section 0 — Defaults Summary
+
+*Fewer than 5 input fields provided — the following assumptions were applied. Verify and override before distributing.*
+
+> **[DEFAULT — VERIFY]** *Hours:* M–F 8 am–5 pm (config did not specify; ADA HPI median). Update if you run evening/Saturday columns.
+> **[DEFAULT — VERIFY]** *Appointment types:* Core GP set (matrix below). Add CEREC same-day crown, Invisalign check, and implant restorative columns — config lists these as services.
+> **[DEFAULT — VERIFY]** *Reminder timing:* 7-day email / 2-day SMS / day-of SMS. *(Channels confirmed from config: Weave, BAA on file.)*
+> **[DEFAULT — VERIFY]** *Production goal:* $5,000/provider/day; $625/provider-hour. Replace with your Dentrix Ascend production-goal column.
+
+---
+
+### Section 1 — Appointment Type Matrix *(excerpt — full matrix in the live run)*
+
+| Appointment Type | Duration | Op Type | Provider | Buffer | ~Production | Fill |
+|-----------------|----------|---------|----------|--------|-------------|------|
+| Recall prophy (adult) | 60 min | Hygiene | RDH+DDS exam | 0/0 | $180–250 | M |
+| Perio maintenance (D4910) | 60 min | Hygiene | RDH | 0/0 | $160–220 | M |
+| SRP per quad (D4341) | 90 min | Hygiene | RDH | 0/10 | $250–400 | H |
+| CEREC same-day crown | 120 min | Doctor | DDS | 10/15 | $900–1,400 | H |
+| Limited exam / emergency | 30 min | Doctor | DDS | 0/10 | $80–150 | H (urgent) |
+
+> **Dentrix Ascend config path:** Schedule → Settings → Appointment Types. Duration in 5-minute increments; provider-column assignment via Provider Schedule Setup → Provider Working Hours. Enter the post-appointment buffer as a Block on the appointment type.
+
+### Section 3 — No-Show Reduction Protocol *(personalized copy)*
+
+> **2-day SMS (Weave, EN):** "Hi [FIRST NAME], this is Cherry Creek Family Dental confirming your visit on [DATE] at [TIME] with [PROVIDER]. Reply Y to confirm or R to reschedule. Questions? Call (303) ___-____."
+> **2-day SMS (Weave, ES — ~20% of patients):** "Hola [FIRST NAME], le escribe Cherry Creek Family Dental para confirmar su cita el [DATE] a las [TIME]. Responda S para confirmar o R para reprogramar."
+
+*PHI-safe: no procedure name or tooth number in any outbound SMS (config `phi_safe_messaging: true`).*
+
+**No-show risk scoring** routes score-2/3 hygiene patients into FLEX blocks only, with phone confirmation. For the 15% hygiene no-show pain point, the highest-leverage move is moving repeat no-show recall patients out of SACRED 9–10 am exam-window slots — those are the costliest to leave empty because they also idle the doctor's exam.
+
+### Section 4 — Same-Day Cancellation Fill *(the second pain point)*
+
+> **Weave fill SMS:** "Hi [FIRST NAME] — Cherry Creek Family Dental just had an opening on [DATE] at [TIME]. Interested? Reply YES and we'll hold it, or call (303) ___-____. First come, first served!"
+
+Pull the Dentrix Ascend **Standby List** (Schedule → Standby List), filter by appointment type + duration to match the open slot, sort by production value, blast the top 3 matches via Weave within 15 minutes. If unfilled at 30 min, offer to same-day emergencies, then convert to an unscheduled-treatment or chart-audit block.
+
+### Section 6 — Audit Callout (example)
+
+> **No-show rate 15% (target < 5%):** Audit the risk-scoring model — are repeat no-show recall patients still being placed in SACRED hygiene blocks? Move them to FLEX, require phone confirmation, and turn on Weave 2-way SMS confirmation. Re-measure in 30 days; cross-reference `monthly-practice-kpi-report`.
+
+**Highest-leverage first move for this practice:** stand up the Standby List → Weave fill loop *today* (recovers same-day production immediately), then fix hygiene SACRED-block placement for repeat no-shows next week.
+
+## Version History
+
+- **v3.0 (2026-06-22)** — Added a worked Example Output: a fast-path run for Cherry Creek Family Dental (2 GP / 2 RDH / 4 ops) showing the Defaults Summary block, an appointment-matrix excerpt with the Dentrix Ascend config path, EN/ES Weave confirmation copy (PHI-safe), the same-day Standby-List fill loop, and an audit callout tied to the practice's two stated pain points. No instruction text removed.
+- **v2.0** — Fast-path defaults engine with [DEFAULT — VERIFY] labeling, 6-section playbook (appointment matrix, block schedule, no-show protocol, same-day fill, waitlist, audit metrics), PMS-specific config paths, courtesy-deposit legal-review flag.
+- **v1.0** — Initial release.
