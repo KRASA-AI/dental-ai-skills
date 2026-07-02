@@ -4,8 +4,8 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/recall-type setup"
-version: 3.0
-last_eval_score: null
+version: 3.1
+last_eval_score: 9.50
 ---
 
 # 📧 Recall Sequence Generator
@@ -199,4 +199,65 @@ You are a dental patient-retention AI assistant. Your job is to produce a comple
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input — try "perio maintenance recall, 3-month interval, high-risk perio with smoker overlay, channels = SMS + email + phone, bilingual threshold met" — to see output quality.]
+**Sample input:** "Perio maintenance recall (#2). Segment: 3+ months past last D4910. Risk overlay: high-risk perio — prior active therapy, current smoker. Channels: SMS + email + live phone. Bilingual threshold met. PMS: Dentrix Ascend. Platform: Weave." *(Config: Cherry Creek Family Dental, Dr. Anna Patel / Dr. Marcus Lee, Weave SMS/email with BAA, Spanish ~20% so bilingual ON, scheduling via Dentrix Ascend/LocalMed, 3–4-month perio interval, PHI ceiling = first name + practice only on unauthenticated channels.)*
+
+---
+
+### CAMPAIGN BRIEF *(one page, office-manager review)*
+
+> **Recall type:** Perio maintenance (D4910), 3-month interval · **Segment:** ≥3 mo past last D4910
+> **Risk overlay applied:** High-risk perio (prior active SRP, current smoker) → tighter Touch 1→2 cadence; **live phone pulled forward to Touch 3** (default is Touch 4); "interval is medically determined, not a sales preference" framing throughout.
+> **Touches:** 6 over ~6 weeks · **Channels:** Email + SMS + live phone (EN + ES parallel) · **Bilingual:** ON (drafts pending native-speaker review; Weave sends per PMS language preference)
+> **Stop conditions:** books / replies with a preference / opts out / flagged inactive-deceased-moved in Dentrix Ascend
+> **Owner:** Front-desk / recall coordinator · **Launch:** [date] · **First review:** +30 days
+
+### TOUCHPOINT PLAN (high-risk perio cadence)
+
+| Touch | Day | Channel | Framing |
+|---|---|---|---|
+| 1 | 0 | Email | Maintenance-not-cleaning; warm, easy book |
+| 2 | 2 | SMS | Short nudge (tightened from Day 3) |
+| 3 | 5 | **Live phone** (pulled forward) | Personal; offer two specific times; voicemail variant |
+| 4 | 14 | Email | Add value — why 3 months matters for stability |
+| 5 | 28 | SMS | Direct but warm; time-since-last-visit |
+| 6 | 42 | Email | "Door's always open"; opt-out reminder |
+
+### CHANNEL COPY *(PHI-safe — first name + practice only; never "perio," "gum disease," or D-codes on unauthenticated channels)*
+
+**Touch 1 — Email (EN)**
+> **Subject:** Time for your next visit, [First Name] *(≤50 chars)*
+> **Preview:** A quick note from Cherry Creek Family Dental
+> Hi [First Name], you're due for your next maintenance visit. For your care plan, the timing between visits is set for a reason — it keeps things stable and catches small issues early, before they need more. Let's get you on the schedule.
+> **[Book online]**  ·  or call us at [Phone]
+> — Dr. Patel & the Cherry Creek team
+> *[unsubscribe] · [Practice Address]*
+
+**Touch 1 — Email (ES parallel — draft, pending native-speaker review)**
+> **Asunto:** Es hora de su próxima visita, [Nombre]
+> Hola [Nombre], ya es momento de su próxima visita de mantenimiento. En su plan de cuidado, el tiempo entre visitas está establecido por una razón: mantiene todo estable y detecta cualquier detalle a tiempo. Con gusto le ayudamos a agendar.
+> **[Reserve en línea]**  ·  o llámenos al [Phone] — *contamos con personal que habla español.*
+
+**Touch 2 — SMS (EN, ≤140 chars)**
+> Hi [First Name], it's Cherry Creek Family Dental — you're due for your next visit. Book: [Scheduling Link] or call [Phone]. Reply STOP to opt out.
+
+**Touch 2 — SMS (ES)**
+> Hola [Nombre], somos Cherry Creek Family Dental — ya es hora de su visita. Agende: [Scheduling Link] o llame [Phone]. Responda STOP para no recibir mensajes.
+
+**Touch 3 — Live phone (30-sec script + voicemail)**
+> *Live:* "Hi [First Name], this is [Caller] at Cherry Creek Family Dental — Dr. Patel's office. You're due for your next visit, and because of your care plan we like to keep these on schedule. I have a Tuesday at 9 or a Thursday at 2 this week — would either work?"
+> *Voicemail:* "Hi [First Name], it's [Caller] at Cherry Creek Family Dental. You're due for your next visit — give us a quick call at [Phone] and we'll find a time that fits. Thanks!"
+
+### PMS EXPORT (Dentrix Ascend)
+> Recall queue → filter recall type = **Perio Maintenance (D4910)**, last-visit ≥ 3 months, **exclude patients with a future appointment**. Pull columns: patient ID, first name, preferred channel, language preference, last-visit date, risk flags, per-channel opt-out status. Spanish-preference rows route to the ES variants in Weave.
+
+### METRICS
+> Per touch: email open/click, SMS reply, call-completion. Sequence: conversion-to-booked by touch (high-risk perio typically recovers by Touch 3–5, later than low-risk prophy). Outcome: recovered visits at 30/60/90 days, cost per recovered visit. Operational: opt-out rate (>baseline = cadence too hot), spam-complaint rate (>0.1% = revisit content). Rolls up to `monthly-practice-kpi-report` retention section.
+
+---
+
+**Most common failure mode:** leaking PHI onto unauthenticated channels — writing "your perio maintenance / deep-cleaning recall" or a D-code into the SMS or email subject (violates config `phi_safe_messaging` and the 45 CFR 164.501 ceiling). The clinical reason for the 3-month interval belongs in *tone and framing* ("your care plan"), never in *disclosed detail*. Second-most-common: running the default Touch-4 phone timing for a high-risk smoker instead of pulling the live call forward to Touch 3, where this segment actually converts.
+
+## Version History
+
+- **v3.1 (2026-06-29)** — Added a real, config-grounded worked Example Output (high-risk-perio D4910 3-month recall with the live-phone-pulled-forward cadence overlay, EN/ES parallel PHI-safe channel copy, the Dentrix Ascend export recipe, and a metrics block) plus a most-common-failure-mode callout. No instruction text removed; `last_eval_score` populated by this cycle's scores.yml.
+- **v3.0** — Ten recall buckets, risk-tier overlay, six-touch default cadence, per-channel copy rules, bilingual variant, PMS export guide, metrics block, full compliance guardrails (HIPAA / TCPA / CAN-SPAM / state-board).

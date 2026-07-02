@@ -4,8 +4,8 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/plan"
-version: 3.0
-last_eval_score: null
+version: 3.1
+last_eval_score: 9.50
 ---
 
 # 🦷 Treatment Plan Explainer
@@ -236,9 +236,74 @@ Always include:
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** "Robert M., 58, anxious about cost, recent retirement so 'watching every dollar.' Diagnosis: #19 cracked tooth syndrome, symptomatic to cold + bite; #30 failing 20-yr MOD amalgam with recurrent decay under distal margin; generalized moderate chronic periodontitis (AAP Stage II Grade B). Plan: #19 RCT (D3330) + core build-up (D2950) + crown (D2740); #30 crown (D2740) ± build-up; SRP all four quadrants (D4341 ×2 + D4342 ×2) → re-eval → D4910 maintenance. Total fee $7,420; Delta Dental PPO, $1,500 annual max, $300 already used, ~$1,050 estimated carrier payment this year; patient portion ~$6,370. Wife Diane is the household decision-maker and was not at the visit. Channels: full handout + email + SMS. Procedure family: general/mixed (restorative + RCT + perio)." *(Config: Cherry Creek Family Dental, Dr. Anna Patel, Dentrix Ascend, Delta Dental PPO in-network, CareCredit + in-house 3-pay 0%/90-day on balances > $1,000, Weave, Spanish ~20% — not flagged for this patient, 7th–8th-grade reading level.)*
+
+---
+
+### FULL PRINTED HANDOUT *(excerpt — ~7th-grade, Robert's copy)*
+
+> **Your Treatment Plan Summary — Cherry Creek Family Dental**
+> Prepared for Robert · June 29, 2026 · Reviewed with Dr. Anna Patel
+> *Prepared with Diane in mind too — please look this over together when you have a quiet moment.*
+>
+> **What We Found Today**
+> Thanks for coming in, Robert — it was good to meet you. Here's what we saw, in plain terms.
+> Your lower-left back tooth (#19) has a crack. Think of it like a cracked windshield: small now, but biting and cold make it spread. Left alone, the crack usually reaches the nerve, and then the tooth needs more work — or can't be saved.
+> Your lower-right back tooth (#30) has a 20-year-old silver filling with new decay sneaking under one edge — like rust starting under old paint. The filling has done its job, but the tooth now needs a stronger cover.
+> Your gums show early-to-moderate gum disease. Gums are the foundation under your teeth. If the foundation softens, even good teeth loosen over time. The good news: we caught this at a stage we can treat and hold steady.
+>
+> **Your Recommended Plan**
+> **Phase 1 — Take care of problems first**
+> 🔴 *Needed soon* — **#19: root canal, then a build-up, then a crown.** We clean out the cracked, irritated nerve, rebuild the inside, and cap it so it can take normal biting again. This is one plan done over about two visits — not three separate decisions.
+> 🔴 *Needed soon* — **#30: crown (with a build-up if needed).** We remove the decay and the old filling and cover the tooth so the decay can't keep spreading.
+> **Phase 2 — Steady the foundation**
+> 🔴 *Needed soon* — **Deep cleaning, all four corners of your mouth (two visits), then a check-up in 4–6 weeks.** After that, cleanings every 3–4 months keep the gums stable.
+> **Phase 3 — Keep it healthy**
+> 🟢 *When you're ready* — night guard to protect the new crowns if we see grinding wear.
+>
+> **Alternatives & Trade-offs (the honest version)**
+> *#19:* (1) Root canal + crown — keeps your own tooth, ~90%+ long-term success. (2) Take it out + implant — also excellent, costs more and takes months. (3) Take it out, replace nothing — cheapest today, but the tooth above drifts down and the gap causes problems later. (4) Wait — the crack usually spreads; what's fixable now may not be in 6–12 months.
+> *Gums:* Treat now and maintain, or do nothing — untreated, moderate gum disease slowly gets harder to reverse. It's your call, and we'll respect it either way.
+>
+> **What It Costs (estimate, not a guarantee)**
+>
+> | | Full fee | Delta PPO est. pays | Your estimate |
+> |---|---|---|---|
+> | Phase 1 — #19 RCT + build-up + crown | $2,940 | ~$620 | ~$2,320 |
+> | Phase 1 — #30 crown | $1,500 | ~$430 | ~$1,070 |
+> | Phase 2 — SRP ×4 quadrants + re-eval | $1,480 | ~$0 *(max nearly used)* | ~$1,480 |
+> | Phase 3 — maintenance (first year) | $1,500 | varies next plan year | ~$1,500 |
+> | **Total** | **$7,420** | **~$1,050 this year** | **~$6,370** |
+>
+> *Heads-up on your Delta plan: only about $1,200 of your $1,500 yearly benefit is left, and it resets January 1. Delta also tends to pay a crown at the base-metal rate — if you choose tooth-colored, the difference is yours. We'll confirm every number with Delta before you commit.*
+>
+> **A Two-Year Way to Stretch Your Benefits**
+> Because your plan resets January 1, doing **#19 + the deep cleaning now (2026)** and **#30 + maintenance after January 1 (2027)** lets a fresh $1,500 benefit help pay for the second half. That alone can save you several hundred dollars — no rush, just smart timing.
+>
+> **Ways to Make It Work**
+> Pay as you go by phase · **CareCredit** (monthly, 0% if paid in the promo window — *if approved*) · **in-house 3-pay**, 0% over 90 days on balances over $1,000 · pay-in-full (ask us about a courtesy). Our treatment coordinator can walk you and Diane through every option — no pressure.
+>
+> **Questions You Two Might Want to Ask Us**
+> "Will the root canal hurt?" · "Why can't we just fill #30?" · "If we do everything right, can I still keep these teeth?" · "Why cleanings every 3 months instead of 6?" · "What if we start with just the cracked tooth?"
+>
+> **Next Steps** — Call us at [Phone], reply to your email, or book at [Scheduling Link]. No rush — take the time you need. We're here when you're ready. — Dr. Anna Patel & the Cherry Creek team
+
+### EMAIL *(subject + opener — no clinical detail in subject)*
+
+> **Subject:** Your treatment plan summary, Robert
+> Hi Robert — it was a pleasure meeting you today. I've attached the full summary of what we found and the plan Dr. Patel recommends, plus a couple of easy ways to spread the cost. I wrote it so you and Diane can look it over together at home. The most time-sensitive item is the cracked tooth (#19) — the rest can be paced. Reply here or call us with any question at all. No rush. — Cherry Creek Family Dental
+
+### SMS *(condensed, PHI-safe — first name + practice only; ≤300 chars)*
+
+> Hi Robert, we emailed your treatment plan summary + a couple of payment options to review with Diane. First step is the tooth that's been bothering you. Questions? Reply or call [Phone]. — Cherry Creek Family Dental
+
+---
+
+**Most common failure mode:** quoting the **$6,370 total** as one scary number instead of (a) sequencing it by urgency, (b) showing the **2-year benefit-split** that drops the first out-of-pocket bite, and (c) producing the **Diane-aware companion framing** — the absent household decision-maker is the single most common reason a plan like this stalls. Second-most-common: putting tooth numbers or "root canal" in the SMS (violates config `phi_safe_messaging`). The highest-value move here is the at-home, decision-maker-ready handout with the phased cost table, not a bigger discount.
 
 ## Version History
+
+- **v3.1 (2026-06-29)** — Added a real, config-grounded worked Example Output (general/mixed restorative + RCT + perio case; Delta Dental PPO near-max-out with a 2-year benefit-split; absent-decision-maker companion framing; full handout + email + PHI-safe SMS channels) plus a most-common-failure-mode callout. No instruction text removed; `last_eval_score` to be populated by this cycle's scores.yml.
 
 - **v3.0 (2026-04-27)** — Added 8 procedure-family templates (single-tooth restorative, RCT, single implant, multi-unit fixed prosth / full-arch, ortho / Invisalign, periodontal staged plan, pediatric, sleep / MAD) with family-specific analogies, alternatives, urgency framing, sequencing logic, medical-history overlays, and family-specific question lists. Added decision-maker companion copy for the absent spouse / parent / adult-child. Added five-channel packaging matrix (full handout / email / portal / SMS condensed / 60-second video script). Added bilingual variant (≥15% Spanish-speaking population threshold). Added Q4 benefits-remaining seasonal trigger. Added demographic-skew-aware reading level (geriatric / pediatric parent / ESL). Expanded cross-reference graph (case-presentation-script, financial-counseling-workflow, informed-consent-drafter, referral-coordination-letter, post-op-care-instructions, clinical-note-assistant, recall-sequence-generator, insurance-verification-summary, monthly-practice-kpi-report). Added carrier-downgrade flag at the cost section.
 - **v2.0 (2026-04-13)** — Standard four-phase structure, alternatives + do-nothing column, financing matrix, reading-level guardrails.

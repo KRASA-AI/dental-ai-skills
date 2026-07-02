@@ -4,8 +4,8 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~25 min/patient"
-version: 3.0
-last_eval_score: null
+version: 3.1
+last_eval_score: 9.40
 ---
 
 # 👋 New Patient Welcome Kit
@@ -154,4 +154,43 @@ You are a dental-practice patient-experience AI assistant. Your job is to produc
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input:** "New patient Karen T., 52. Booked by phone; said on the call she 'hasn't been to a dentist in almost 10 years' and 'gets really anxious.' Appointment: comprehensive exam with Dr. Patel, Tue 7/14, 9:00 a.m., 75-min block, oral sedation planned. Out-of-network PPO, benefits to be checked. Channel: email + SMS pair. Variant: sedation / anxiety." *(Config: Cherry Creek Family Dental, Denver CO, Dr. Anna Patel, Dentrix Ascend online forms, Weave email/SMS with BAA, CareCredit + in-house Cherry Creek Smile Club, files PPO as a courtesy, comfort amenities, never promise "painless," 7th–8th-grade default → 5th-grade for anxiety context.)*
+
+> **Internal note for front desk:** Sedation/anxiety variant. Oral sedation = **escort/driver required** and **fasting per Dr. Patel's protocol** — both are confirmed in the calls below. Send the email today; send the SMS pair the morning before the visit. Verify OON Delta benefits before 7/14 and have the estimate ready at check-in.
+
+### WELCOME EMAIL *(sedation/anxiety variant — warm, ~5th-grade, no clinical jargon)*
+
+> **Subject:** We're so glad you're coming in, Karen
+> Hi Karen,
+> We're really glad you booked with us, and we want your visit on **Tuesday, July 14 at 9:00 a.m.** with **Dr. Patel** to feel easy from the moment you walk in. First — there's no judgment here, ever. A lot of our patients haven't been in for a while. You're in good hands.
+> **What your visit looks like.** We'll take it slow. You and Dr. Patel will talk first — about your health, what's been on your mind, and what you'd like. Then a gentle exam and some X-rays so we can see the full picture. Nothing gets decided or started until you understand it and you're ready.
+> **About the sedation.** Because we're using oral sedation to help you stay relaxed, two things matter:
+> • **Please bring a driver** — someone to bring you and take you home. The medicine makes it unsafe to drive.
+> • **Please don't eat or drink** beforehand — Dr. Patel's office will call with the exact timing. (We'll confirm this on the phone too.)
+> Wear comfy, loose clothes. We've got blankets, headphones, and a ceiling TV — tell us what helps you relax.
+> **Before your visit** *(about 10 minutes):* fill out your forms here → **[Forms Link]**, and snap a photo of the front and back of your insurance card → **[Portal Link]**. We'll check your benefits ahead of time and walk you through any costs — no surprises.
+> **Need to change the day?** Just reply or call **[Phone]** — easy to reschedule, no problem at all.
+> We can't wait to meet you, Karen. You're taking a great step.
+> Warmly,
+> Dr. Anna Patel & the Cherry Creek Family Dental team
+> [Address] · [Phone] · [Website]
+
+### SMS PAIR *(send morning before; PHI-safe — first name + practice only)*
+
+> **SMS 1:** Hi Karen, it's Cherry Creek Family Dental — looking forward to seeing you tomorrow at 9:00 with Dr. Patel. Reminder: please bring a driver and hold off on eating/drinking (we'll confirm timing). Questions? Call [Phone].
+> **SMS 2:** Forms not done yet? Here's the link — takes about 10 min: [Forms Link]. See you soon! Reply STOP to opt out.
+
+### PRE-VISIT CHECKLIST *(sedation add-ons folded in)*
+> ☐ Driver/escort arranged (required for oral sedation) ☐ Fasting per our call ☐ Loose, comfortable clothing ☐ Photo ID + insurance card photos uploaded ☐ Current medications list (names + doses) ☐ List of anything worrying you or any questions ☐ Forms completed online
+
+### WHAT-TO-EXPECT GUIDE *(condensed)*
+> Arrive ~15–20 min early (a little extra for sedation). We talk first, then a gentle exam, X-rays, an oral-cancer screening (routine — we do it for everyone), and a look at your gums. Most thorough first visits do the cleaning at a second appointment. We'll review any findings with a "here's what we see and here are your options" approach — never a hard sell. Total time about 75 minutes plus sedation recovery.
+
+---
+
+**Most common failure mode:** using the standard-adult tone instead of the **extra-warm, no-judgment, 5th-grade** sedation/anxiety voice — the mismatch is exactly what a 10-years-away anxious patient notices, and it costs the appointment. Close behind: **burying or omitting the driver + fasting requirements** (they must appear in the email *and* be confirmed by phone — a day-of surprise means a cancelled sedation visit), and promising "painless" or a specific out-of-pocket number on an out-of-network plan before benefits are verified (config: never "painless"; use "we'll verify and share your estimate first").
+
+## Version History
+
+- **v3.1 (2026-06-29)** — Added a real, config-grounded worked Example Output (sedation/anxiety new-patient variant: extra-warm 5th-grade welcome email, the required driver + fasting call-outs surfaced in both email and SMS, PHI-safe SMS pair, sedation-specific checklist, and a front-desk internal note) plus a most-common-failure-mode callout. No instruction text removed; `last_eval_score` populated by this cycle's scores.yml.
+- **v3.0** — Six appointment-type variants (general adult, pediatric, implant consult, ortho/Invisalign, sedation/anxiety, emergency), five kit components, language/accessibility/decision-maker variants, bilingual and delivery-packaging logic.
