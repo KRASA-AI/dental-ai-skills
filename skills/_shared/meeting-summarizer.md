@@ -4,9 +4,9 @@ category: _shared
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~20 min/meeting"
-version: 3.0
+version: 3.1
 dental_override: true
-last_eval_score: null
+last_eval_score: 9.50
 ---
 
 # 🗒️ Meeting Summarizer (Dental)
@@ -175,10 +175,67 @@ You are a dental-practice meeting-minutes AI assistant. Your job is to produce a
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example — the highest-stakes meeting type this skill handles, because the recap **is** the audit artifact: an **OSHA / HIPAA training** recap. It must carry the required-field anchors (topic, trainer, regulation citations, an attendance signature block, next-due date), a stamped audience tier, and the state-by-state retention footer, or a state-board / OSHA auditor will find the gap. Grounded in `config.example.yml` (Cherry Creek Family Dental; office manager = HIPAA officer; Colorado Dental Board; 9-person team).*
+
+**Input the user gave:**
+> "Recap the annual bloodborne-pathogens + HIPAA refresher we did today, 7/6. Whole team was there except Dr. Lee (out). Sarah (office manager / HIPAA officer) ran it. Covered sharps handling, the new 2026 HIPAA Security Rule stuff, and phishing. Everyone passed the 10-question quiz. Need it for the compliance binder."
+
+---
+
+> **OSHA / HIPAA TRAINING RECAP — AUDIENCE TIER: T3 (external / auditor-ready)**
+>
+> **Meeting:** Annual Bloodborne Pathogens (OSHA) + HIPAA Security Rule Refresher
+> **Date/Time:** 2026-07-06, 8:00–9:15 AM · **Location:** Cherry Creek Family Dental, main operatory
+> **Trainer:** Sarah [L.], Office Manager / HIPAA Privacy & Security Officer
+> **Purpose:** Fulfill annual OSHA BBP retraining (29 CFR 1910.1030) and the HIPAA workforce security-awareness requirement.
+> **Privileged?** No.
+>
+> **Content covered**
+> - OSHA Bloodborne Pathogens — 29 CFR 1910.1030: sharps handling & safer-device use, exposure-control plan review, post-exposure procedure, PPE, regulated-waste flow.
+> - CDC infection-control refresher: instrument reprocessing, surface disinfection.
+> - HIPAA Security Rule (2026 update — see `knowledge-base/regulations/hipaa-security-rule-2026.md`): risk-analysis cadence, access controls, BAA-covered-tool rule (only BAA tools touch PHI — Weave in, Google Drive non-PHI only).
+> - Phishing / social-engineering awareness (feeds `cybersecurity-incident-response-plan`).
+>
+> **Decisions made**
+> - Google Drive reaffirmed **non-PHI only**; any PHI doc routes to Dentrix Ascend / Weave. (Sarah, effective immediately.)
+> - Quiz pass threshold 8/10; all present scored ≥8. (Sarah.)
+>
+> **Action items**
+>
+> | Action | Owner | Due | Status | Cross-skill |
+> |---|---|---|---|---|
+> | Deliver make-up session to Dr. Lee (absent) | Sarah | 2026-07-13 | new | `staff-onboarding-checklist` |
+> | File signed attendance sheet + quiz keys in compliance binder | Sarah | 2026-07-06 | new | — |
+> | Schedule next annual refresher | Sarah | 2027-07-06 | new | — |
+>
+> **Open questions**
+> - Confirm whether CO Dental Board wants infection-control CE credit logged separately from this OSHA record (Sarah to verify with board).
+>
+> **Attendance — signature block (compliance artifact; sign & retain)**
+>
+> | Attendee (role) | Quiz | Signature | Date |
+> |---|---|---|---|
+> | Dr. Anna Patel (owner/GD) | 10/10 | __________ | ______ |
+> | Hygienist 1 | 9/10 | __________ | ______ |
+> | Hygienist 2 | 9/10 | __________ | ______ |
+> | Treatment coordinator | 10/10 | __________ | ______ |
+> | Dental assistant 1 | 8/10 | __________ | ______ |
+> | Dental assistant 2 | 9/10 | __________ | ______ |
+> | Front desk / scheduling | 9/10 | __________ | ______ |
+> | Sarah [L.] (trainer/OM) | — (trainer) | __________ | ______ |
+> | Dr. Marcus Lee | **ABSENT — make-up by 7/13** | | |
+>
+> **Next training due:** 2027-07-06 (annual).
+>
+> **Retention footer:** HIPAA training record — retain **6 years** from creation. OSHA BBP training record — retain **3 years** (29 CFR 1910.1020). Store in `outputs/compliance/training/2026-07-06-osha-hipaa-refresher.md` + the physical compliance binder. Colorado Dental Board CE, if credited, follows the state's dental practice act retention window.
+
+---
+
+**Most common failure mode this example guards against:** shipping a training recap without the **attendance signature block** or the **retention footer** — the two elements that turn a nice summary into an auditable record. An OSHA or state-board auditor asks for signed proof each named person attended and for evidence the record is retained the required number of years; a recap missing either is the artifact but fails the audit. Also note the absent provider is captured as an open action (make-up by 7/13), not silently dropped.
 
 ## Version History
 
+- **v3.1 (2026-07-06)** — Added a worked, auditor-ready OSHA/HIPAA training-recap Example Output grounded in `config.example.yml` (Cherry Creek Family Dental; office manager = HIPAA/Security officer; Colorado Dental Board; 9-person roster). Demonstrates the T3 tier stamp, required-field anchors, the attendance signature block, the state-by-state retention footer, and absent-attendee make-up handling — plus a most-common-failure-mode callout. Additive only; no instruction prose removed. `last_eval_score` populated.
 - **v3.0 (2026-04-27)** — Added 12 per-meeting-type required-field anchors (huddle, end-of-day, case review, staff, 1:1, CE, OSHA / HIPAA / infection-control training, cybersecurity tabletop, lab / vendor, DSO regional, partner / M&A, HR). Added three-tier PHI redaction model (T1 treating-team / T2 full-team operational / T3 external + auditor) stamped in recap header. Added state-by-state retention guidance footer (HIPAA 6 yr, OSHA training 3 yr / exposure 30 yr, state CE state-specific, patient records state-specific, HR 3 yr+, cybersecurity 6 yr+, vendor BAA term + 6 yr). Added privileged-document protocol for owner / M&A meetings with attorneys present. Added per-meeting-type output-folder routing (ops / compliance / incident-tabletop / HR-private / privileged / DSO). Added cross-skill column to action-items table (links to `aging-ar-followup-playbook`, `staff-onboarding-checklist`, etc.). Added end-of-day-debrief pattern feeding `morning-huddle-brief` yesterday-scoreboard line and `monthly-practice-kpi-report` weekly aggregation. Added cybersecurity-tabletop pattern feeding `cybersecurity-incident-response-plan` IRP-update cycle. Added HR conversation pattern (Tier 1, single-distribution).
 - **v2.0 (2026-04-15)** — Dental override added; 10 dental meeting patterns (morning huddle, case review, staff meeting, 1:1, CE, OSHA / HIPAA training, lab / vendor, DSO regional, partner, M&A); HIPAA-appropriate redactions by default; required owner + due date on all action items.
 - **v1.0** — Cross-industry shared skill, generic meeting recap format.

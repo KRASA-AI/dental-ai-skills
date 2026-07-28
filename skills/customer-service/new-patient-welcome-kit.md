@@ -4,8 +4,8 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~25 min/patient"
-version: 3.1
-last_eval_score: 9.40
+version: 3.2
+last_eval_score: 9.60
 ---
 
 # 👋 New Patient Welcome Kit
@@ -41,6 +41,25 @@ Provide the following:
 5. **Kit components desired** — Welcome email, pre-visit checklist, what-to-expect guide, office info sheet, forms cover letter; default is the full kit
 6. **Delivery channel** — Email only, email + SMS pair, email + printed packet mailed, or portal-only
 7. **Practice-specific artifacts to include** — Provider intro video or bio link, office tour video, patient financial policy PDF, HIPAA notice, any membership-plan flyer
+
+### Fast path — only 3 of the 7 fields are actually blocking
+
+A welcome kit should never require a seven-field form before it produces a draft — the front desk is booking the patient, not filling out a survey. Only three inputs are strictly required:
+
+1. **Patient first name + age category** (field 1)
+2. **Appointment type** (the variant — field 1) — if it reads only "consult," ask the single clarifying question in Process step 2; otherwise infer
+3. **Appointment date / time / provider** (field 2)
+
+Everything else is **derived from `config.yml` and stamped as an explicit `ASSUMED:` line** the front desk corrects in one pass:
+
+- **Delivery channel** (field 6) → default from `config.yml → tools.patient_comms` (for Cherry Creek: **Weave, BAA on file → email + SMS pair**); portal-only only if the practice runs portal-first onboarding.
+- **Insurance status** (field 4) → default from `config.yml → insurance` (in-network Delta PPO / Cigna DPPO / MetLife PDP Plus; "we file OON as a courtesy"; in-house Cherry Creek Smile Club for the uninsured). Never state a covered amount — use "we'll verify your benefits and share your estimate."
+- **Kit components** (field 5) → default to the **full kit** (all five components) unless the user narrows it.
+- **Practice-specific artifacts** (field 7) → pull provider bios, hours, address, parking, accessibility, financing (CareCredit + in-house 3-pay), and membership-plan terms from `config.yml`; omit any artifact config doesn't list rather than inventing it.
+- **Special circumstances** (field 3) → assume none beyond what the variant implies; if the booking note mentions anxiety, sedation, an interpreter need, or a non-English primary language, fold in the matching variant automatically.
+- **Language** → produce the Spanish parallel automatically when config's Spanish patient share is ≥15% (Cherry Creek: ~20%), flagged for bilingual-staff review before send.
+
+Render the derived values as a short **`ASSUMED:` block in the front-desk internal note** at the top of the kit. Three inputs in, a full kit out — corrections happen once, not before the first draft exists.
 
 ## Instructions
 
@@ -192,5 +211,6 @@ You are a dental-practice patient-experience AI assistant. Your job is to produc
 
 ## Version History
 
+- **v3.2 (2026-07-20)** — Added a **fast-path rule** to Required Input: only 3 of the 7 fields (patient name/age, appointment type/variant, appointment date/time/provider) are blocking; delivery channel, insurance status, kit components, practice artifacts, special circumstances, and language are all derived from `config.yml` (Weave email+SMS, Delta/Cigna/MetLife + Smile Club, CareCredit + in-house 3-pay, ~20% Spanish → auto bilingual) and surfaced as a correctable `ASSUMED:` block in the front-desk internal note instead of a seven-field intake. This is a genuine config-consumption mechanism — three inputs in, a full kit out. Additive only; no instruction prose removed (the existing v3.1 worked example already demonstrates the config grounding). `last_eval_score` updated.
 - **v3.1 (2026-06-29)** — Added a real, config-grounded worked Example Output (sedation/anxiety new-patient variant: extra-warm 5th-grade welcome email, the required driver + fasting call-outs surfaced in both email and SMS, PHI-safe SMS pair, sedation-specific checklist, and a front-desk internal note) plus a most-common-failure-mode callout. No instruction text removed; `last_eval_score` populated by this cycle's scores.yml.
 - **v3.0** — Six appointment-type variants (general adult, pediatric, implant consult, ortho/Invisalign, sedation/anxiety, emergency), five kit components, language/accessibility/decision-maker variants, bilingual and delivery-packaging logic.

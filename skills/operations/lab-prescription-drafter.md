@@ -4,8 +4,8 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~8 min/case"
-version: 2.0
-last_eval_score: 9.40
+version: 2.1
+last_eval_score: 9.60
 ---
 
 # 🦷 Lab Prescription Drafter
@@ -269,4 +269,96 @@ Flag these before the Rx leaves the practice:
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example — the case type with the **highest remake cost and the hardest failure mode**: an **implant-supported screw-retained crown**. A missing platform size, connection type, or torque value is not an inconvenience; the lab literally cannot fabricate, and the case sits until someone calls. The example deliberately runs on an **incomplete input** so the auto-flag layer is visible doing its job — which is the whole point of the skill. Grounded in `config.example.yml` (Cherry Creek Family Dental, Denver CO; Dr. Anna Patel, NPI 1234567890, CO-DDS-00000; implant placement & restoration in-house; Dentrix Ascend).*
+
+**Input the user gave (incomplete — as it usually arrives):**
+> "Lab Rx for Denise K. — #19 implant crown, screw-retained, monolithic zirconia. Straumann. Scanned it today with the Trios. Send to Glidewell, need it back for the 8/11 seat."
+
+---
+
+> ### ⚠️ HOLD — 3 REQUIRED FIELDS MISSING. Rx drafted below; **do not submit until resolved.**
+>
+> | # | Missing field | Why the lab cannot proceed | Ask |
+> |---|---|---|---|
+> | 1 | **Implant platform Ø + connection type** | "Straumann" names a manufacturer, not a component. Straumann BL / BLT / BLX / TLX carry different connections (CrossFit conical, TorcFit) and platforms (NC Ø3.3 / RC Ø4.1 / WN). The wrong TiBase = a remake and a second surgical-kit fee. | Pull the **implant sticker from the surgical chart note** (`clinical-note-assistant`) — brand, platform, connection, and lot are all on it. |
+> | 2 | **Torque value** | Goes on the Rx *and* the patient's chart *and* the final seat note. Straumann BL screw-retained is typically **35 Ncm**, but confirm against the component IFU actually placed. | Confirm from surgical note. |
+> | 3 | **Scan body used** | Glidewell matches the scan body to a library file. A Trios STL with an unidentified scan body cannot be aligned. | Confirm brand + REF (Straumann CARES Mono Scanbody, or third-party — name it). |
+>
+> *Non-blocking but flagged:* #19 is posterior with a low display zone → **stump shade not required**. Photograph **not required**. Antagonist scan **is** required and is on the file list below — confirm it was captured.
+>
+> ---
+>
+> ### SECTION A — UNIVERSAL Rx
+>
+> **Practice:** Cherry Creek Family Dental · Denver, CO · (practice phone/fax from `config.yml`)
+> **Provider:** **Dr. Anna Patel, DDS** · License **CO-DDS-00000** · NPI **1234567890**
+> **Patient:** Denise K. (chart ID per Dentrix Ascend — pseudonymous submission; Glidewell accepts patient ID in lieu of full name)
+> **Case #:** CCFD-2026-0714-19 · **Due (in office):** **2026-08-08** — 3 business days before the **8/11 seat**, not on it.
+>
+> | Field | Value |
+> |---|---|
+> | Tooth # (Universal) | **#19** |
+> | Arch / quadrant | Mandibular left, first molar |
+> | Restoration type | **Implant-supported, screw-retained, single-unit crown** |
+> | Material / product | **Glidewell BruxZir Solid Zirconia (3Y-TZP)** — order code `BZ-SOLID` |
+> | Retention | **Screw-retained** (not cement-retained — no subgingival cement, no peri-implantitis cement risk) |
+> | Shade — body | **A2 Vita Classical** |
+> | Shade — incisal / cervical | n/a (posterior monolithic, single shade) |
+> | Stump shade | **n/a** — opaque monolithic zirconia over titanium; no translucency compensation needed |
+> | Margin design | n/a (implant emergence — see profile below) |
+> | Occlusal reduction | Restorative space **9.5 mm** cuspal-to-platform (from scan) — adequate for BruxZir Solid (≥3.0 mm required) |
+> | Contact preference | **Broad, light contact** M and D. Implant crowns do **not** have a PDL — mesial contact one shim-stock thickness lighter than natural-tooth standard to allow adjacent-tooth physiologic movement. |
+> | Occlusal scheme | **Shallow cuspal inclines. Light-to-no contact in MIP; hold at 0 in light closure, light contact in heavy closure. No working- or non-working-side excursive contact — canine guidance disoccludes.** (Implant occlusal protection — the single highest-value line on this Rx.) |
+> | Bite registration | Trios digital bite scan, MIP. Antagonist arch scanned. |
+> | **Implant specifics** | Brand: **Straumann [BL / BLT — CONFIRM]** · Platform: **[NC Ø3.3 / RC Ø4.1 — CONFIRM]** · Connection: **[CrossFit internal conical — CONFIRM]** · Torque: **[35 Ncm — CONFIRM vs. component IFU]** · TiBase: **Straumann Variobase, matched to confirmed platform** · Access-hole material at seat: **PTFE tape + composite** · Screw-channel angulation: **straight (no ASC angulation indicated on scan)** · Emergence profile: **natural molar contour, cleansable — no ridge-lap overcontour; buccal emergence flat enough to pass a superfloss/interdental brush** |
+>
+> **Files enclosed**
+> ☑ Intraoral scan (STL — **3Shape Trios**, scanned 2026-07-14)
+> ☑ Opposing-arch scan
+> ☑ Bite registration (digital, MIP)
+> ☐ **Scan-body identification — REQUIRED, see HOLD #3**
+> ☐ Implant sticker / surgical record — **attach; resolves HOLD #1 and #2**
+> ☐ Pre-op photographs — *not required (posterior, low display zone)*
+> ☐ CBCT — *not required (restorative case, guide already used at placement)*
+>
+> **Special instructions**
+> - Patient is a **confirmed bruxer** (night guard in fabrication, separate Rx). Keep occlusal morphology **night-guard compatible** — no aggressive cusp height. Monolithic full-contour only; **no porcelain layering** on the occlusal table (chipping risk under parafunction).
+> - Verify the emergence profile is **cleansable**; this patient has a perio history (`clinical-note-assistant` surgical note) and peri-implant maintenance is on a 3-month D4910 recall.
+> - **Call the office before proceeding if the scan body cannot be matched** — do not substitute a library guess.
+>
+> **Shipping:** FedEx to office · **Due 2026-08-08** · Standard 5–7 business day turnaround (no rush flag needed — the timeline clears).
+>
+> **Provider signature:** ______________________ Dr. Anna Patel, DDS · CO-DDS-00000 · NPI 1234567890 · Date: __________
+>
+> ---
+>
+> ### SECTION B — GLIDEWELL PASTE-IN (MyGlidewell portal → notes field)
+>
+> ```
+> Pt: CCFD-2026-0714-19 | Tooth: #19 | Restoration: Implant crown, SCREW-RETAINED |
+> Material: BZ-SOLID (BruxZir Solid Zirconia 3Y) | Shade: A2 Vita Classical | Stump: n/a |
+> Margin: n/a - implant emergence, cleansable natural molar contour, no ridge-lap |
+> Occlusal reduction: 9.5mm restorative space | Contacts: broad light M+D, 1 shim lighter than natural-tooth standard |
+> Occlusal scheme: shallow inclines; light/no contact in MIP; NO excursive contact (canine guidance disoccludes) |
+> Bite: Trios digital, MIP | Implant: Straumann [PLATFORM/CONNECTION - CONFIRM] | Torque: [35 Ncm - CONFIRM] |
+> TiBase: Straumann Variobase (match confirmed platform) | Scan body: [CONFIRM BRAND+REF] |
+> Access hole: PTFE + composite | Channel angulation: straight |
+> Files: STL (Trios) + opposing + bite | Special: BRUXER - monolithic full contour, night-guard-compatible, NO occlusal layering. Perio hx - emergence must be cleansable. CALL OFFICE IF SCAN BODY UNMATCHED. |
+> Due: 2026-08-08 | Provider: Dr. Anna Patel DDS, NPI 1234567890
+> ```
+>
+> *Upload STL bundle via the MyGlidewell **Files** tab. Stump shade left blank deliberately (Glidewell's stump field is separate from the body-shade field — n/a here).*
+>
+> ---
+>
+> **Consistency check (before submit):** the Rx above and the surgical chart note must agree on brand, platform, connection, torque, and shade. If they disagree, the **chart note wins** and the Rx is corrected — a lab Rx that contradicts the chart is an audit finding (`chart-audit-prep`). CDT for the seat: **D6058** (abutment-supported porcelain/ceramic crown) or **D6065** (implant-supported porcelain/ceramic crown) depending on the final component configuration — confirm with `cdt-code-assistant` **after** the platform is confirmed, because the code follows the component, not the intent.
+
+---
+
+**Most common failure mode this example guards against:** writing a **plausible-looking, submittable Rx over an incomplete input.** The path of least resistance here is to write "Straumann, 35 Ncm" — a reasonable default that is right most of the time — and let the lab find out. When it is wrong, the practice eats a remake, a second seat appointment, and a patient who now doubts the case. The skill's job on an implant case is to **refuse to guess the component** and to convert the three unknowables into three specific asks pointed at the one document that answers all of them (the implant sticker in the surgical note). Note also the two lines a general Rx template would never produce, and where the money actually is: the **occlusal scheme** (implants have no PDL — they take the load a natural tooth would absorb, and an implant crown in full MIP contact under a bruxer is a screw-loosening / porcelain-fracture / peri-implant-bone-loss case waiting to happen) and the **cleansable emergence profile** on a perio-history patient. Those two lines are the difference between a lab Rx and a lab technician's phone call in six months.
+
+## Version History
+
+- **v2.1 (2026-07-13)** — Added a worked implant screw-retained-crown Example Output grounded in `config.example.yml` (Cherry Creek Family Dental; Dr. Anna Patel NPI/license; Trios scan; Glidewell). Deliberately run on an **incomplete input** so the auto-flag / HOLD layer is demonstrated rather than described: three blocking fields (platform Ø, connection type, torque; plus scan-body ID) converted into three specific asks pointed at the implant sticker in the surgical note. Also demonstrates the implant-specific occlusal scheme (no PDL → no MIP/excursive contact), the cleansable emergence profile on a perio-history patient, the bruxer-driven material constraint, the "due 3 business days before seat" rule, Section-B Glidewell paste-in, and the Rx-vs-chart-note consistency check feeding `chart-audit-prep` / `cdt-code-assistant` — plus a most-common-failure-mode callout on writing a plausible Rx over an incomplete input. Additive only; no instruction prose removed. `last_eval_score` populated.
+- **v2.0 (2026-04-27)** — Added Section B vendor-aware paste-in formats for six high-volume US labs (Glidewell, DDS Lab, Modern Dental, Drake, Becden, O'Brien) and three chairside CAD/CAM platforms (CEREC, 3Shape Trios/Unite, Planmeca PlanMill); added the auto-flag common-pitfall layer (stump shade, anterior photo, bite-registration method, material/reduction incompatibility, implant platform/connection/torque, ovate-pontic site development, full-arch CBCT + scan body, CAD/CAM stump-shade field); added cross-references to `clinical-note-assistant` v3.0 prosthodontic template, `chart-audit-prep`, and `cdt-code-assistant`.
+- **v1.0** — Initial release: universal Rx field set (Section A), files-enclosed checklist, special-instructions block, provider signature block.

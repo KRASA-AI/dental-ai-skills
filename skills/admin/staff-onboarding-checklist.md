@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~6–10 hrs/new hire"
-version: 1.0
-last_eval_score: null
+version: 1.1
+last_eval_score: 9.60
 ---
 
 # 👥 Dental Staff Onboarding Checklist
@@ -45,6 +45,23 @@ Provide the following:
 5. **License and credentialing status** — Current license number(s), expiration date(s), DEA (for prescribing dentists), NPI (for any clinical role), malpractice policy (who carries, claims-made vs. occurrence), state CE cycle renewal date
 6. **Prior experience** — If the new hire is experienced (lateral from another practice), shorten the "how to do this procedure" sections and lengthen the "how we do it here" sections
 7. **Reporting structure** — Who is the direct supervisor, who is the assigned buddy/preceptor, who is the HR contact, who is the HIPAA Privacy Officer and HIPAA Security Officer
+
+### Fast path — only 3 of the 7 fields are actually blocking
+
+Do **not** interrogate the office manager for all seven fields before producing anything. Only three inputs are strictly required:
+
+1. **Role** (field 1)
+2. **Start date** (field 2)
+3. **State** (field 3) — and even this defaults from `config.yml → company.location` if not given
+
+Everything else is **derived from `config.yml` and stated inline as an explicit assumption** the office manager can correct in one pass:
+
+- **Practice stack** (field 4) → `config.yml → tools`
+- **Reporting structure** (field 7) → `config.yml → team.roles` (owner = supervisor for clinical; office manager = supervisor for admin and HIPAA Privacy/Security Officer unless named otherwise)
+- **License / credentialing status** (field 5) → left as a **fill-in-blank tracking table** in the Day-1 packet rather than blocked on; the numbers are collected at Day 1 anyway, and they must never be pasted into a non-BAA AI tool (see Guardrails)
+- **Prior experience** (field 6) → default to **experienced lateral hire** (shorter "how to do the procedure," longer "how we do it here"); if the new hire is a new graduate, the office manager says so and the plan re-weights
+
+Render every derived value in an **`ASSUMED:`** line at the top of the plan. One correction round, not seven questions. Ask a clarifying question only when a *blocking* field is genuinely absent and undeterminable from config.
 
 ## Instructions
 
@@ -165,4 +182,93 @@ You are a dental office manager AI assistant. Your job is to produce a 30–60�
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example — the **hygienist (RDH)** hire, which is the role where this skill's regulatory clocks actually bite: the RDH is in an operatory with occupational exposure on Day 1, exposes radiographs, and in most states has a scope-of-practice boundary (local anesthesia, nitrous, SRP under which supervision level) that the office manager cannot afford to guess at. The example also demonstrates the **fast path** — three inputs in, a complete plan out, with every derived value stamped `ASSUMED:` for a single correction pass. Grounded in `config.example.yml` (Cherry Creek Family Dental, Denver CO; Dentrix Ascend, Dexis, Overjet, Weave; Dr. Anna Patel owner; office manager = HIPAA officer; 9-person team).*
+
+**Input the user gave (fast path — 3 fields):**
+> "New hygienist starting 8/3."
+
+---
+
+> ### 90-DAY ONBOARDING PLAN — RDH — Start 2026-08-03
+> **Cherry Creek Family Dental · Denver, CO**
+>
+> **`ASSUMED:` (derived from `config.yml` — correct any line and I'll re-render)**
+> - **State:** Colorado → **Colorado Dental Board / DORA**; CO requires a **separate radiography certification** and CO **permits RDH local-anesthesia administration** with the required course + dentist supervision. **Office manager to verify against the current CO Dental Practice Act — this is the #1 state-specific item on this plan.**
+> - **Supervisor:** Dr. Anna Patel (owner/GD). **Buddy/preceptor:** the senior hygienist (2 RDH on staff). **HIPAA Privacy + Security Officer:** the office manager.
+> - **Stack:** Dentrix Ascend (PMS + perio charting) · Dexis (imaging) · **Overjet (AI diagnostic)** · Weave (patient comms, BAA on file) · LocalMed (online booking).
+> - **Experience:** experienced lateral hire (weights toward "how we do it here"). *Say so if this is a new grad and I'll re-weight.*
+> - **Credentials:** collected at Day 1 into the tracking table below — **do not send license #, DEA, SSN, or DOB through any AI tool** (`phi-safe-prompting.md`).
+>
+> ---
+>
+> #### ⏱ THE THREE HARD CLOCKS (miss these and the practice is out of compliance)
+>
+> | Clock | Deadline | Real date | Status |
+> |---|---|---|---|
+> | **OSHA bloodborne-pathogens training** — must be complete **before any occupational exposure**, i.e. before she is in an op. Federal rule is "within 10 working days," but the exposure comes first, so the *operative* deadline is Day 1. | **Before first patient** | **2026-08-03, AM** | ☐ |
+> | **Hepatitis B vaccine offered at no cost** — signed acceptance **or** signed declination on file | **within 10 days** | **by 2026-08-14** | ☐ |
+> | **HIPAA workforce training** — CO has no shorter statutory clock; use the 30-day standard | **within 30 days** | **by 2026-09-02** | ☐ |
+>
+> **⛔ HARD STOP: she may not expose a single radiograph until the Colorado radiography certification is verified on file — even though she has been practicing hygiene elsewhere.** Out-of-state experience is not a substitute. Verify on the DORA license lookup and keep the printout.
+>
+> ---
+>
+> #### DAY 1 — 2026-08-03 (nothing on this list is optional)
+>
+> **HR** ☐ I-9 §1 (her) · ☐ I-9 §2 (employer — **within 3 business days**, by 8/6) · ☐ W-4 + CO withholding · ☐ direct deposit · ☐ emergency contact · ☐ handbook ack · ☐ at-will ack · ☐ **confidentiality / HIPAA ack** · ☐ benefits packet · ☐ scrubs issued
+> *Non-compete: **Colorado sharply restricts non-competes** (C.R.S. 8-2-113, as amended 2022) and enforceability against a hygienist is doubtful. **Practice attorney decides — not this skill, not the office manager.***
+>
+> **Credentialing — tracking table (fill at Day 1; expirations go in the compliance calendar)**
+>
+> | Credential | # | Expires | Verified on state site | On file |
+> |---|---|---|---|---|
+> | CO RDH license | ______ | ______ | ☐ | ☐ |
+> | **CO radiography certification** | ______ | ______ | ☐ | ☐ **(blocks radiographs)** |
+> | CPR / BLS | ______ | ______ | — | ☐ |
+> | Local-anesthesia certification *(if she'll administer)* | ______ | ______ | ☐ | ☐ |
+> | Nitrous monitoring *(if in scope + practice offers)* | ______ | ______ | ☐ | ☐ |
+> | NPI (Type 1) | ______ | — | — | ☐ |
+> | CO CE cycle renewal date | — | ______ | — | ☐ |
+>
+> **Security — least privilege** ☐ Dentrix Ascend login: **clinical + perio charting write; billing = read-only; no financial-adjustment rights** · ☐ Dexis · ☐ **Overjet** · ☐ Weave (clinical role, no marketing sends) · ☐ practice email · ☐ key/key-card · ☐ alarm code **individually assigned and auditable** (never a shared code)
+>
+> **Tour** ☐ 4 ops · ☐ **sterilization — walk the dirty→clean flow in that direction** · ☐ lab · ☐ **OSHA binder + SDS binder location** · ☐ **emergency kit + AED** (know it cold before her first patient) · ☐ eye-wash · ☐ sharps + biohazard schedule · ☐ exits
+>
+> ---
+>
+> #### WEEK 1 — compliance + "how we do it here"
+> - **8/3 AM — OSHA BBP** (before ops): exposure-control plan, standard precautions, PPE, **post-exposure protocol — she must be able to say out loud what she does in the first 5 minutes after a stick**, sharps, HazCom/SDS, ionizing radiation + **dosimetry badge assigned**, waterline program (**≤500 CFU/mL**, shock + test cadence), instrument cycle + **weekly spore test**, emergency action plan, ergonomics/loupes.
+> - **8/4–8/5 — infection control (CDC dental settings):** surface disinfection tiers, **impression/prosthesis disinfection before lab handoff**, TB baseline (two-step or IGRA), respiratory hygiene.
+> - **8/5 — CO Dental Practice Act read-and-sign:** RDH scope, supervision level required for each act (**local anesthesia, SRP, nitrous, radiographs — one line each**), delegation rules, **mandatory reporting** (child/elder abuse, impaired colleague), **CO patient-record retention period**.
+> - **8/6 — Dentrix Ascend clinical:** perio charting conventions (AAP 2018 stage/grade — *our* convention), Dexis capture/upload, note templates (`clinical-note-assistant`), recall/recare coding (`recall-sequence-generator`).
+> - **8/7 — Overjet (AI diagnostic) — this is the training most practices skip:** how findings surface, **that the provider confirms every AI-flagged finding**, false-positive/false-negative handling, and **the exact sentence she says when a patient asks "is AI reading my x-rays?"** (2026 ADA consent guidance — see `ada-ai-standards-2026.md`, `informed-consent-drafter`). BAA inventory review: **Weave and Dentrix Ascend are BAA-covered; Google Drive is non-PHI only.**
+> - **HIPAA training** — schedule any day before 9/2; do not let it drift to Day 29.
+>
+> #### SHADOW / RAMP (RDH)
+> - **Days 1–3:** shadow senior RDH, all chairs. **Days 4–10:** co-treat — she works, senior RDH within earshot. **Weeks 3–4:** independent column, **senior RDH is her 100% backup, no exceptions**. **Week 5+:** solo, standing Friday 10-min check-in with Dr. Patel.
+> - Joins the **morning huddle from Day 1** (`morning-huddle-brief`) — she is on the risk-flag rows from the first day (MRONJ, anticoagulant, A1c patients are hers).
+>
+> ---
+>
+> #### 30 / 60 / 90
+>
+> | | Date | Question that is actually being asked | Evidence |
+> |---|---|---|---|
+> | **Day 30** | **2026-09-02** | Are all three compliance clocks **documented**, not just done? Is she charting perio to our convention? Any ergonomic or safety concern? **What did we fail to teach her?** | Training certs on file · 5 charts audited (`chart-audit-prep`) |
+> | **Day 60** | **2026-10-02** | Is hygiene production on target? Is she **finding and communicating perio disease**, or just cleaning? Patient rapport? | Hygiene production vs. goal (`monthly-practice-kpi-report`) · perio-diagnosis rate · re-appointment rate |
+> | **Day 90** | **2026-11-01** | **Probationary decision: continue / extend with a written coaching plan / separate.** Decision and its evidence are documented either way. | Full review form + all evidence above |
+>
+> ---
+>
+> #### HR FILE BUNDLE → `outputs/onboarding/DK-2026-08-03/`
+> Signed acks (handbook, HIPAA, OSHA, confidentiality, at-will) · **Hep-B acceptance or declination** · training certs (OSHA, HIPAA, infection control, radiation safety, CPR) · credential copies + expiration tracker · 30/60/90 forms.
+> **Retention:** employment records **3 yr** post-separation · HIPAA training **6 yr** · OSHA training **3 yr** · **OSHA exposure records: duration of employment + 30 years.**
+
+---
+
+**Most common failure mode this example guards against:** treating an **experienced** hire as a low-risk hire. The lateral RDH who has been practicing for eight years is exactly the person who gets walked into an operatory on Day 1 "just to help out," before her OSHA training, before her Hep-B offer, and — the one that actually ends careers — **before anyone verified her Colorado radiography certification**, because everyone assumes the state she came from is close enough. It isn't; radiography certification is state-by-state and does not travel. The plan therefore front-loads the three hard clocks and one hard stop above everything else, and states them as dates rather than as rules, because "within 10 working days" is a rule nobody tracks and "by 2026-08-14" is a date somebody does. The second trap the example closes is the **AI-disclosure gap**: the practice runs Overjet on every bitewing, and a hygienist who cannot answer "is AI reading my x-rays?" in one calm sentence is a consent problem sitting in the operatory — so that sentence is a training deliverable, not a nice-to-have.
+
+## Version History
+
+- **v1.1 (2026-07-13)** — Added a **fast-path rule** to Required Input: only 3 of the 7 fields are blocking (role, start date, state — and state defaults from `config.yml`); everything else is derived from config and stamped as an explicit `ASSUMED:` line for a single correction pass instead of a seven-question interrogation. Added a worked RDH Example Output grounded in `config.example.yml` (Cherry Creek Family Dental; Colorado; Dentrix Ascend / Dexis / Overjet / Weave; office manager = HIPAA officer), demonstrating the fast path, the three hard regulatory clocks rendered as **real dates**, the Colorado radiography-certification hard stop, the least-privilege access matrix, the Overjet AI-disclosure training deliverable, the RDH shadow/ramp ladder, and the 30/60/90 evidence table — plus a most-common-failure-mode callout on treating an experienced lateral hire as a low-risk hire. Additive only; no instruction prose removed. `last_eval_score` populated.
+- **v1.0 (2026-04-27)** — Initial release: role-specific 30–60–90 plan across 11 dental roles; Day-1 HR + credentialing + least-privilege security + facility tour packet; OSHA 10-day / Hep-B 10-day / HIPAA state-window regulatory clocks; infection-control and CDC-guideline training; state dental practice act read-and-sign; role-specific PMS, AI-diagnostic, AI-scribe, and AI-receptionist training modules; 30/60/90 competency checkpoints; HR documentation bundle with retention windows; 10 guardrails.

@@ -4,9 +4,9 @@ category: _shared
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~10 min/email"
-version: 3.0
+version: 3.1
 dental_override: true
-last_eval_score: null
+last_eval_score: 9.50
 ---
 
 # ✉️ Email Drafter (Dental)
@@ -181,4 +181,51 @@ This skill explicitly chains with:
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example — the single most failure-prone pattern this skill exists to get right: a **past-due balance reminder** that must (a) sit at exactly one FDCPA-aware tier, (b) offer the practice's real financing, (c) stay PHI-safe on the SMS companion, and (d) mirror into Spanish because the practice is over the ≥15% threshold. Grounded in `config.example.yml` (Cherry Creek Family Dental; Dr. Anna Patel; Weave; CareCredit + in-house 3-pay 0% over 90 days for balances > $1,000; ~20% Spanish; PHI-safe messaging; firm-but-respectful voice).*
+
+**Input the user gave:**
+> "Balance reminder. Patient Robert M., $1,240 owed for a crown seated 4/28, insurance already paid its part. This is our second follow-up — first went out ~5 weeks ago. He speaks Spanish at home. Send email + a text."
+
+**Skill's read:** aging bucket = **61–90 days** (service 4/28, today 7/06 ≈ 69 days) → third-reminder tier, financing offer unlocks, next-step deadline named at 30 days, **no** collections language yet. Balance > $1,000 → in-house 3-pay is eligible alongside CareCredit. Spanish companion required with native-speaker review checkbox.
+
+---
+
+**① Email (English) — primary artifact**
+
+**Subject:** Robert, a quick note about your Cherry Creek Family Dental balance
+
+> Hi Robert,
+>
+> I'm following up on the balance of **$1,240.00** for your visit on April 28. Your insurance has already paid its portion, and this amount is what's left after that payment.
+>
+> Your account is now 60+ days past due, so I wanted to reach out personally before anything else. Two easy ways to take care of it:
+>
+> • **Pay online** in about a minute: [Portal Pay Link]
+> • **Call us** at (303) 555-0142 and we can take it over the phone.
+>
+> If it would help to spread this out, we have options — **CareCredit**, or our **in-house 3-pay plan (0% over 90 days)**, which your balance qualifies for. Just say the word and we'll set it up.
+>
+> To keep your account in good standing, could we settle this or start a plan **by July 20**? If something's going on, please call — we'd much rather work with you than have this hang over either of us.
+>
+> Warmly,
+> The Cherry Creek Family Dental Team
+> (303) 555-0142 · [Portal Link] · cherrycreekfamilydental.com
+
+*Notes: 61–90 tier only (offer + a single 30-day-out deadline, zero "collections" language — that is reserved for the 91–120 tier). No procedure name ("crown") in the subject line. "Estimate" language not needed here because the carrier has already paid — the number is final, and the email says so.*
+
+**② SMS companion (PHI-safe, ≤160 chars, links out — never dun in the text body):**
+> Hi Robert, it's Cherry Creek Family Dental. You have a balance we'd like to help you wrap up. Details & pay: [Portal Link]. Questions? (303) 555-0142. Reply STOP to opt out.
+
+*No amount, no "crown," no "past due" in the SMS — the dollar figure and the account detail live behind the authenticated portal link. TCPA: prior express consent assumed on file; STOP honored.*
+
+**③ Spanish companion — ⚠️ native-speaker review checkbox: [ ] reviewed by bilingual front-office staff before send**
+
+**Asunto:** Robert, una nota rápida sobre su saldo en Cherry Creek Family Dental
+> Hola Robert:
+> Le escribo sobre el saldo de **$1,240.00** de su visita del 28 de abril. Su seguro ya pagó su parte; esta cantidad es lo que queda. Puede pagar en línea aquí: [Portal Pay Link], o llamarnos al (303) 555-0142. Si le ayuda, podemos dividir el pago — **CareCredit** o nuestro **plan interno de 3 pagos (0% en 90 días)**, para el cual su saldo califica. ¿Podríamos resolverlo o iniciar un plan **antes del 20 de julio**? Si hay algo que podamos hacer, por favor llámenos. — El equipo de Cherry Creek Family Dental
+
+---
+
+**Most common failure mode this example guards against:** compressing two aging tiers into one send — jumping a 65-day balance straight to "your account will be sent to collections." That language is not permitted until the **91–120** tier and only with the practice's written policy and state law verified by the owner. Work the tiers in sequence; this send names a deadline and an offer, nothing harsher. Second-most-common: leaking the dollar amount or the procedure into the SMS body instead of behind the portal link.
+
+*If this balance later crosses 90 days, escalate via `aging-ar-followup-playbook` (which owns the dunning-trail audit save), not by hardening this email.*

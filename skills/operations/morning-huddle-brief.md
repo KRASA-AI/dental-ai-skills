@@ -4,8 +4,8 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~20 min/day"
-version: 3.0
-last_eval_score: null
+version: 3.1
+last_eval_score: 9.50
 ---
 
 # ☀️ Morning Huddle Brief
@@ -170,13 +170,108 @@ You are a skilled dental practice management AI assistant. Your job is to produc
 - Do not run a brief without a one-line yesterday-scoreboard feedback loop — practices that skip the loop drift on production by 5-15% within a quarter
 - Do not include a multi-doctor brief without a per-provider column — generic averages obscure the provider whose schedule actually has problems
 - Do not produce a Spanish-flag patient row without a Spanish-language post-op / consent / treatment-plan companion ready to hand them at checkout
+- Do not re-derive numbers the practice's analytics vendor already computes (Dental Intelligence Explorer, Weave dashboards, Dentrix Ascend Power Reporting). This brief is the **synthesis and narrative layer over** vendor analytics, not a competing source of the numbers — take the production, unscheduled-treatment, and no-show figures from the vendor as given, cite the source in the brief, and spend the huddle's ten minutes on the decisions those numbers imply. A brief that silently disagrees with the dashboard on the wall destroys trust in both.
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example — the default and highest-volume case this skill runs on: a **general-practice (GP) day** at a 4-op practice. It is also the case where the brief either earns its 10 minutes or wastes them, because a GP day is where the risk-flag overlay, the sedation pre-flight, the same-day-treatment section, and the open-chair fill plan all fire at once. Grounded in `config.example.yml` (Cherry Creek Family Dental, Denver CO; Dentrix Ascend + LocalMed; Dr. Anna Patel + Dr. Marcus Lee; 2 hygienists; Overjet; Weave; CareCredit + in-house 3-pay; Delta / Cigna / MetLife PPO; ~20% Spanish-speaking; ~25% pediatric).*
+
+**Input the user gave:**
+> "Huddle brief for tomorrow, Tue 7/14. Dentrix Ascend day view attached — 14 patients, both docs, both hygienists. Doctor goal $6,200, hygiene $2,400. Yesterday we did $5,850 doctor / $2,510 hygiene, one no-show (hygiene 2pm). One IV sedation case (implant #19, Dr. Patel, 8:00). Two lab cases due back. 9:30 Op 2 is open, 60 min."
+
+---
+
+> **☀️ MORNING HUDDLE — Tue 2026-07-14 — Cherry Creek Family Dental**
+> *Source of numbers: Dentrix Ascend day view + Power Reporting, pulled 6:42 AM. Focus word: **PREPARATION.***
+>
+> **1. Today at a Glance**
+> - **Doctor:** $5,940 scheduled vs. **$6,200 goal (96%)** — Patel $4,110 / Lee $1,830
+> - **Hygiene:** $2,180 scheduled vs. **$2,400 goal (91%)**
+> - **Patients:** 8 doctor · 6 hygiene · **1 IV sedation**
+> - **Open chair:** 9:30 Op 2, 60 min (the only hole — see §7)
+> - Snow off the forecast; no weather attrition expected.
+>
+> **2. Yesterday's Scoreboard**
+> - Doctor $5,850 / goal $6,200 (94%) · Hygiene $2,510 / goal $2,400 (**105%**)
+> - 1 no-show (hygiene 2:00, Kevin R.) — front desk re-books today, 2-strike note added.
+> - Tx presented $9,400 / accepted $3,200 (34%) — the two pending are both on today's schedule (Marta L., Robert M.). *Feeds `monthly-practice-kpi-report`.*
+> - After-hours: 1 call (post-op ext. #30, controlled) — Dr. Lee to phone-check by 10:00.
+>
+> **3. Patient-by-Patient Review**
+>
+> | Time | Prov/Op | Patient | Appt | $ | Flags | Action |
+> |---|---|---|---|---|---|---|
+> | 8:00 | Patel / Op1 | **Denise K.** | Implant placement #19, **IV sedation** | $2,850 | 💤 🚩 | **See §3a pre-flight — do not seat until all 5 boxes clear** |
+> | 8:00 | Hyg-A / Op3 | Marta L. | Perio maint. D4910 | $210 | 🌎 [ES] 🔄 | #3 crown unscheduled ($1,290) — offer at doctor check; **Spanish treatment-plan handout printed** |
+> | 9:00 | Lee / Op2 | Robert M. | Crown seat #14 | $1,290 | ⚠️ 📷 | Lab case **verified received 7/11, shade A2 confirmed** · $214.30 PT-BAL — **collect at check-in** |
+> | 9:30 | — / **Op2** | **OPEN** | — | **$0** | — | **Fill — see §7** |
+> | 10:30 | Lee / Op2 | Tomás R. | NP exam + FMX | $385 | 💍 🌎 [ES] 📷 | Referred by **Marta L.** → personal thank-you note to Marta today · Delta PPO **verified** · tour: Sarah; financial: TC |
+> | 11:00 | Hyg-B / Op4 | Eleanor W., 81 | Prophy + BW | $178 | 🚩 | **Prior IV bisphosphonate** (MRONJ) — no surgical procedures today; flag stands for any future ext. |
+> | 1:00 | Patel / Op1 | Jaden P., 7 | Sealants + exam | $240 | 👶 🧒 | **Parent must be present** · custody: **mother is sole medical decision-maker** — do not treat on father's consent |
+> | 1:00 | Hyg-A / Op3 | Frank D. | Prophy | $148 | 🚩 | **Warfarin** — no SRP/perio instrumentation today; INR not on file, hygiene-only OK |
+> | 2:00 | Lee / Op2 | Sophia N. | Composite #30 MO | $295 | 😰 📝 | Anxiety pt — comfort room, extra 10 min, **opt out of review request** · **no signed consent on file → `informed-consent-drafter` before seating** |
+> | 3:00 | Patel / Op1 | Karen T. | RCT #12 | $1,260 | 🚩 | **Penicillin allergy** — clindamycin if premed needed |
+>
+> *(4 routine hygiene rows omitted for length — no flags.)*
+>
+> **3a. Sedation Pre-Flight — Denise K., 8:00, IV (Dr. Patel)** — *five boxes, all must clear before she is seated:*
+>
+> | Check | Status | Owner |
+> |---|---|---|
+> | NPO ≥6 hr solids / ≥2 hr clears | ☐ **confirm by phone at 6:45** | Front desk |
+> | Escort present + phone on file | ✅ husband, on file | — |
+> | Signed sedation consent on file | ✅ signed 7/09 | — |
+> | Pulse-ox / capnography / O₂ / **reversal agents in date** | ☐ **verify — check flumazenil/naloxone expiry** | Assistant |
+> | Recovery bay assigned | ☐ Op1 doubles as recovery — clear 9:30 turnover | Assistant |
+>
+> **4. Lab & Materials**
+> - **Seating today:** Robert M. (9:00) — #14 zirconia crown, **received, shade verified**. ✅
+> - **Overdue:** Sophia N.'s night guard — **8 days out**. Call lab by **9:00**; if not shipping today, front desk re-books her guard delivery. (Owner: Sarah.)
+> - **Implant tray (Denise K.):** surgical guide ✅ · abutment driver ✅ · **torque wrench calibration — verify before 8:00**.
+>
+> **5. Same-Day Treatment Opportunities** — *offer only where time and clinical fit allow; no pressure.*
+> - **Marta L.** — #3 crown, diagnosed 5/2026, unscheduled ($1,290). Doctor check at 8:40 → offer. **Fits the 9:30 Op 2 hole.** Spanish handout ready; `case-presentation-script` if cost objection; CareCredit + in-house 3-pay available.
+> - **Frank D.** — #19 MOD amalgam, recurrent-decay watch flagged by Overjet on 1/2026 BWs. Take BWs today; if confirmed, offer.
+>
+> **6. New Patient Spotlight — Tomás R., 10:30**
+> - Source: **existing-patient referral from Marta L.** (8:00 today — thank her in person *and* send the note).
+> - Chief complaint: "sensitive upper right, been putting it off." Delta PPO **verified**, $1,500 max, $0 used.
+> - Spanish-preferred → intake, consent, and treatment plan in Spanish. Welcome kit sent 7/10. Tour: Sarah. Financial: TC.
+>
+> **7. Open Chair Time & Fill Plan — 9:30 Op 2 (60 min, $0)**
+> 1. **First call:** Marta L. same-day #3 crown (she is already in the building at 8:00). — *Dr. Patel offers at doctor check; TC closes by 8:50.*
+> 2. **If declined:** LocalMed waitlist text — 3 patients within 5 mi with accepted-but-unscheduled restorative. — *Sarah, texts out by 7:45.*
+> 3. **If still open by 9:00:** pull from `patient-reactivation-sequence` 6-month lapsed list. — *Sarah.*
+>
+> **8. Team Logistics**
+> - Dr. Lee out Thu–Fri (CE, implant course) — Patel covers emergencies; front desk holds Thu doctor column.
+> - **Weekly spore test:** ✅ passed 7/11. **Waterline test:** due **this Friday** — Sarah to run.
+> - OSHA/HIPAA annual refresher make-up for Dr. Lee: **overdue, was due 7/13** → reschedule (`staff-onboarding-checklist`, `meeting-summarizer`).
+>
+> **9. Huddle Close — Decisions & Assignments**
+>
+> | Owner | Action | By |
+> |---|---|---|
+> | Front desk | Call Denise K. — confirm NPO + escort | 6:45 |
+> | Assistant | Verify reversal-agent expiry + torque-wrench calibration | 7:50 |
+> | Sarah | Text LocalMed waitlist for 9:30 Op 2 | 7:45 |
+> | Sarah | Call lab re: Sophia N. night guard (8 days overdue) | 9:00 |
+> | Dr. Patel | Offer #3 crown to Marta L. at doctor check (ES handout) | 8:40 |
+> | TC | If Marta accepts → book into 9:30 Op 2, present CareCredit / 3-pay | 8:50 |
+> | Front desk | Consent for Sophia N. **before** she is seated | 1:45 |
+> | Dr. Lee | Post-op check call, last night's #30 ext. | 10:00 |
+> | Front desk | Re-book Kevin R. (yesterday's no-show) | EOD |
+>
+> **Focus word: PREPARATION.**
+> **End-of-day recap stub → `outputs/huddles/2026-07-14-eod-stub.md`:** production %, same-day treatment captured, no-show count, 9:30 hole filled Y/N.
+
+---
+
+**Most common failure mode this example guards against:** the huddle that **reads the schedule out loud instead of leaving with decisions.** Everything above is engineered against that: every flag on a patient row resolves to an owner and a clock time in §9, the sedation case is a five-box gate rather than an announcement ("💤 IV sedation at 8" is awareness; "call her at 6:45 to confirm NPO — front desk" is a huddle), and the open 9:30 hole gets a *ranked* three-step fill plan rather than a hopeful mention. Two secondary traps the example also closes: (a) **flag wallpaper** — Eleanor's MRONJ and Frank's warfarin flags appear because they *change today's behavior* (no surgical procedures, no perio instrumentation), not because they are true; a flag that never changes an action should be dropped from the row. (b) **Numbers drift** — the brief cites Dentrix Ascend Power Reporting as the source and does not recompute production, so it can never quietly contradict the dashboard the team already trusts.
 
 ## Version History
 
+- **v3.1 (2026-07-13)** — Added a worked GP-day Example Output grounded in `config.example.yml` (Cherry Creek Family Dental; Dentrix Ascend + LocalMed; Patel/Lee; Overjet; Weave; CareCredit + in-house 3-pay; ~20% Spanish; ~25% pediatric). Demonstrates the risk-flag overlay resolving to owners and clock times, the five-box sedation pre-flight gate, the ranked open-chair fill plan, the same-day-treatment offer routed through `case-presentation-script`, and the end-of-day recap stub — plus a most-common-failure-mode callout (schedule-reading vs. decision-making, flag wallpaper, numbers drift). Added one Common Pitfalls bullet establishing the skill's positioning as the synthesis/narrative layer **over** vendor analytics (Dental Intelligence Explorer, Weave, Dentrix Ascend Power Reporting) rather than a competing source of the numbers — picking up the highest-value pending skill revision flagged by the 2026-07-13 landscape monitor. Additive only; no instruction prose removed. `last_eval_score` populated.
 - **v3.0 (2026-04-27)** — Added specialty-mix profiles (GP / perio / endo / OMFS / pedo / ortho / prostho / sleep / DSO multi-doctor), risk-tier overlay (sedation NPO, MRONJ, anticoagulant, A1c, pregnancy, anxiety, pediatric, custody, [ES] bilingual), Q4 benefits-remaining flag, balance-collect-at-checkin flag from aging-ar-followup-playbook, three output artifacts (master + per-doctor column + end-of-day recap stub), PMS export field guidance, sedation pre-flight checklist, skip-condition rule, expanded cross-reference graph (8 upstream/downstream/sibling skills).
 - **v2.0 (2026-04-13)** — Standard 9-section structure, HIPAA-appropriate identifiers, scannable formatting rules.
 - **v1.0** — Initial release.

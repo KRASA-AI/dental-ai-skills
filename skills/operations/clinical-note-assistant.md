@@ -4,8 +4,8 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~5 min/note"
-version: 3.0
-last_eval_score: null
+version: 3.1
+last_eval_score: 9.50
 ---
 
 # 📝 Clinical Note Assistant
@@ -202,4 +202,38 @@ This skill explicitly chains with:
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example — the input branch that most distinguishes this skill and most often goes wrong: an **AI-scribe draft** that must be vocabulary-normalized, checked for the mandatory rubber-dam line, run through the hallucination pass, and reformatted to the practice's PMS paste-in. Grounded in `config.example.yml` (Cherry Creek Family Dental; Dr. Anna Patel; PMS = **Dentrix Ascend**; ambient voice = **Dentrix Ascend Voice**; Universal numbering).*
+
+**Input the user gave (raw Dentrix Ascend Voice scribe draft, verbatim):**
+> "Patient in pain upper right. Tooth 3 has mesial occlusal distal decay into the pulp. Diagnosis irreversible pulpitis. Started root canal, opened access, working length established, calcium hydroxide placed, closed with temporary. Prescribed amoxicillin. Patient tolerated well."
+
+**Skill's read:** procedure family = **endodontic**; PMS target = **Dentrix Ascend** (CDT on first line, procedure-attached note); input is an **AI-scribe draft** → run vendor normalization + hallucination pass. Two problems the raw draft has: (1) **no rubber-dam documentation** — mandatory for endo per ADA/AAE; (2) the scribe added an **antibiotic** the provider may or may not have actually indicated for irreversible pulpitis (a classic scribe over-capture and an antibiotic-stewardship flag) → hallucination-flag for provider confirmation, do not paste as fact.
+
+---
+
+> **D3330 — RCT, molar** *(CDT on first line, Dentrix Ascend procedure-attached)*
+>
+> **S:** Patient presents with pain, upper right quadrant. Reports the chief complaint prompting today's endodontic treatment on tooth **#3**. Medical history / allergies / medications verified per chart.
+> **O:** Tooth **#3** with **MOD** caries extending into the pulp. Diagnosis consistent with pulpal involvement (vitality/percussion findings per chart).
+> **A:** Symptomatic **irreversible pulpitis, #3**. ICD-10 **K04.0** (pulpitis). CDT **D3330** (endodontic therapy, molar).
+> **P:** Anesthesia administered [agent / cartridges / site / aspiration / response — *confirm, not in scribe draft*]. **Rubber-dam isolation placed** [⚠️ **REQUIRED per ADA/AAE — confirm placed; scribe draft omitted it**]. Access opening established through the crown. Working length established [apex-locator + radiographic confirmation — *confirm method*]. Canals medicated with **calcium hydroxide**. Access **temporized** (temporary restoration). Patient tolerated the procedure well. Post-op instructions delivered per `post-op-care-instructions` (endodontic family).
+>
+> **— Internal — do not paste — Audit-Defensibility Checklist —**
+> - [x] Tooth # with system (Universal #3)  · [x] Diagnosis + ICD-10 (K04.0)  · [x] CDT (D3330)
+> - [ ] **Anesthesia** agent/volume/site/aspiration — *missing from scribe draft; provider to add*
+> - [ ] **Rubber-dam isolation** — *missing; MANDATORY for endo; provider to confirm & document*
+> - [ ] Working-length **method** (apex locator + radiograph) — *confirm*
+> - [x] Intracanal medicament (CaOH) · [x] Temporary placed · [x] Patient tolerance
+> - [ ] Informed consent on file (`informed-consent-drafter`) — *confirm*
+>
+> **— Flagged for provider review (AI-scribe hallucination / over-capture pass) —**
+> - ⚠️ **Amoxicillin / antibiotic:** scribe documented a prescription. Antibiotics are **not** indicated for irreversible pulpitis without systemic involvement (fever, swelling, cellulitis) per AAE stewardship guidance. **Confirm the Rx was actually intended and clinically justified** before it enters the chart; if not said/indicated, remove. (Cross-check `cdt-code-assistant` if a code changes.)
+
+---
+
+**Most common failure mode this example guards against:** pasting an AI-scribe draft straight into the chart as if it were verified. Two things a scribe reliably gets wrong on endo notes: it **drops the rubber-dam line** (mandatory standard-of-care documentation — its absence is an audit and medicolegal liability), and it **over-captures medications or findings the provider never confirmed** (here, an antibiotic for irreversible pulpitis). The skill never silently fixes or silently omits these — it surfaces both as explicit provider-review flags. AI scribes are a documentation accelerator, not a clinical decision-maker.
+
+## Version History
+
+- **v3.1 (2026-07-06)** — Added a worked Example Output on the AI-scribe-draft input branch (Dentrix Ascend Voice → Dentrix Ascend paste-in), grounded in `config.example.yml`. Demonstrates vendor normalization, the mandatory rubber-dam-isolation flag, the audit-defensibility checklist, and the hallucination/over-capture pass (antibiotic-for-irreversible-pulpitis stewardship flag) — plus a most-common-failure-mode callout. Additive only; no instruction prose removed. `last_eval_score` populated.
+- **v3.0** — 8 procedure-family templates, 7 PMS-specific paste-in layouts, ambient-voice vendor pass-through normalization map, audit-defensibility checklist.

@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~12–20 hrs/incident (and avoids ~$250K+ downside in a worst-case ransomware event)"
-version: 1.0
-last_eval_score: null
+version: 1.1
+last_eval_score: 9.60
 ---
 
 # 🛡️ Cybersecurity Incident Response Plan
@@ -45,6 +45,21 @@ Provide the following:
 - **Specific incident details (only if responding to a live event).** Time of detection, who detected it, what is visible (ransom note, locked accounts, file extensions changed, unusual emails), systems affected, whether systems are still on the network, whether backups are intact, whether anyone has communicated with the attacker, whether any patient data is confirmed exfiltrated.
 
 If the input is incomplete, the output should still produce a usable plan and explicitly mark the assumptions made (for example, "Assuming MFA on PMS only — extend to email and remote access").
+
+### Fast path — two modes, and standing-IRP mode needs zero blocking input
+
+This skill has two invocation modes, and conflating them is what makes it feel heavy:
+
+**Standing-IRP mode (the common case — building or refreshing the written plan).** No field is blocking. The entire practice profile is derived from `config.yml` and stamped as an explicit `ASSUMED:` block the practice corrects in one pass:
+
+- **Practice profile** → `config.yml → company.size` + `tools` (for Cherry Creek: single location, 4 operatories; **Dentrix Ascend** PMS, **Dexis** imaging, **Overjet** AI diagnostic — a PHI-touching AI vendor, so it gets a BAA line and an "AI-tool prompt-injection PHI leak" tabletop scenario; **Weave** patient comms + payments, BAA on file; **DentalXChange** clearinghouse). Google Drive is stamped **non-PHI only** per config.
+- **Roles** → `config.yml → team.roles` + `compliance`. Incident Commander = owner (Dr. Patel); Privacy/Security Officer = **office manager** (config names them HIPAA officer); Comms Lead = office manager; Clinical Continuity = lead hygienist. Cross-name an alternate for the office manager, since that role is triple-loaded.
+- **State** → `config.yml → company.location` (**Colorado**) + `compliance.state_board` (Colorado Dental Board). Expand Colorado's breach-notification statute specifically (Colo. Rev. Stat. §6-1-716: notice "in the most expedient time possible and without unreasonable delay," **not to exceed 30 days** — stricter than HIPAA's 60 — and AG notice if **500+ Colorado residents** are affected). Never emit a generic "consult your state law."
+- **Posture fields** (MFA %, EDR vendor, 24/7 monitoring, prior incidents, last tabletop, cyber-insurance carrier, breach counsel) → these are genuinely unknown from config. Do **not** block on them: render each as a **fill-in-blank line in the standing plan** and add any gap (e.g., "no last-tested-recovery date on file") to the next-step list. The plan is more valuable delivered with named gaps than withheld pending a security questionnaire.
+
+**Live-incident mode (responding now).** The *only* additional block that matters is the **specific-incident details** field (time/what's visible/systems affected/backups intact/attacker contacted). Take those five facts and route straight to the severity tier and hour-zero runbook — do not re-collect the config-derivable profile mid-incident.
+
+Render the derived profile as an `ASSUMED:` block at the top of the plan. Standing-IRP mode is effectively one-shot from config; live-incident mode is five facts to a runbook.
 
 ## Instructions
 
@@ -138,3 +153,20 @@ Generated bundle includes:
 4. **Post-incident bundle templates.** Timeline reconstruction template, four-factor risk-assessment worksheet, evidence chain-of-custody form, after-action review template, updated risk-analysis cover memo.
 
 The practice now has a working IRP, the wall-poster runbook is laminated at every workstation, the communication drafts are sitting with breach counsel for review and shelving, and the next quarter's tabletop is on the calendar.
+
+### Fast-path (standing-IRP mode) example — zero blocking input, everything from `config.yml`
+
+**Sample input:** *"We need our incident response plan refreshed for the HIPAA risk assessment. What do you need from me?"* — nothing else provided.
+
+> **`ASSUMED:` (derived from `config.yml` — correct any line and I'll re-render)**
+> • **Profile** — single location, 4 operatories; **Dentrix Ascend** (PMS/EHR), **Dexis** (imaging), **Overjet** (AI diagnostic — PHI-touching, BAA required), **Weave** (comms + payments, BAA on file), **DentalXChange** (clearinghouse). Google Drive = **non-PHI only** per config.
+> • **Roles** — Incident Commander = Dr. Anna Patel (owner); Privacy/Security Officer = office manager (config's named HIPAA officer); Comms Lead = office manager; Clinical Continuity = lead hygienist. **Alternate needed** — office manager is triple-loaded; cross-name a backup.
+> • **State** — Colorado. Breach notice **≤ 30 days** (Colo. Rev. Stat. §6-1-716, stricter than HIPAA's 60); Colorado AG notice if **500+ CO residents** affected. Colorado Dental Board for any licensure-reportable angle.
+> • **Overjet** → gets a BAA-inventory line and the **"AI-tool prompt-injection PHI leak"** quarterly tabletop scenario.
+> • **Fill-in-blank (not blocking, added to next-step list):** MFA coverage %, EDR vendor, 24/7 monitoring, cyber-insurance carrier + limits, breach counsel on retainer, last tested-recovery date.
+
+The four-part bundle then renders exactly as in the Texas example above, but Colorado-specific and Cherry-Creek-specific — one correction pass on the ASSUMED block, no security questionnaire before the first draft.
+
+## Version History
+
+- **v1.1 (2026-07-20)** — Added a **fast-path rule** to Required Input distinguishing two modes: **standing-IRP mode** (building/refreshing the plan) now has **zero blocking input** — the practice profile, roles, and state are derived from `config.yml` (Dentrix Ascend / Dexis / Overjet / Weave / DentalXChange; office manager = HIPAA officer; Colorado §6-1-716 30-day notice) and stamped as a correctable `ASSUMED:` block, with unknown posture fields rendered as fill-in-blank next-steps rather than blockers; **live-incident mode** routes the five incident facts straight to the severity tier and hour-zero runbook without re-collecting the config-derivable profile. Added a config-grounded standing-IRP fast-path example (Cherry Creek, Colorado) alongside the existing generic Texas example. Additive only; no instruction prose or guardrails removed. `last_eval_score` populated.

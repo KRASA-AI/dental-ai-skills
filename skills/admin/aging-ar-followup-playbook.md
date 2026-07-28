@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~2–4 hrs/week per biller"
-version: 1.0
-last_eval_score: null
+version: 1.1
+last_eval_score: 9.60
 ---
 
 # 💰 Aging A/R & Claims Follow-up Playbook
@@ -45,6 +45,18 @@ Provide the following:
 4. **Prior follow-up history** — If any claim on the report has already been worked this cycle (phone call, resubmission, payer rep name, reference number), paste the notes so they are not duplicated.
 5. **Patient-payment plan status** — Which patients are on an active payment plan (so their balance is not dunned further) and which have a promise-to-pay date.
 6. **Write-off policy** — The practice's write-off thresholds (e.g., balances under $25 auto-written-off; balances over $X require owner approval; denial for "not a covered benefit" written off vs. billed to patient).
+
+### Fast path — only 1 of the 6 fields is actually blocking
+
+Do **not** hold the worklist hostage to a six-part intake. The biller has exactly one thing on Monday morning that the skill cannot manufacture: **the aging report export (field 1).** Everything else is derived from `config.yml` and the knowledge base, stamped as an explicit `ASSUMED:` line the biller corrects in one pass:
+
+- **A/R split** (field 2) → if the export doesn't separate insurance vs. patient A/R, infer from whether the claim is still open with the carrier; stamp the inference.
+- **Carrier timely-filing windows** (field 3) → default from the carrier-quirk layer below and `config.yml → insurance.in_network_plans` (for Cherry Creek: Delta Dental PPO 90-day initial / 180-day appeal, Cigna DPPO, MetLife PDP Plus). Any carrier in the report not on the config list is flagged **`VERIFY filing window`** rather than guessed.
+- **Prior follow-up history** (field 4) → assume none unless PMS notes are pasted; never invent a rep name or reference number.
+- **Patient-payment-plan status** (field 5) → default from `config.yml → pricing.financing_options` (CareCredit; in-house 3-pay 0% over 90 days for balances > $1,000). Any balance that looks like an active in-house plan is stamped `ASSUMED: on payment plan — confirm` and set to HOLD rather than dunned.
+- **Write-off policy** (field 6) → default to a conservative standing rule (balances < $25 auto-write-off candidate; anything over the config-implied owner-approval line stays a *candidate* for sign-off) and stamp it. The skill never executes a write-off regardless (see Guardrails).
+
+Render every derived value in an **`ASSUMED:` block at the top of the executive summary** so the biller corrects the assumptions once instead of answering six questions before seeing a single worked account. Ask a clarifying question only when the aging export itself is unreadable or missing the columns needed to compute buckets.
 
 ## Instructions
 
@@ -150,4 +162,39 @@ You are a dental A/R specialist AI assistant. Your job is to produce a prioritiz
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+*Worked example demonstrating the **fast path**: one input in — a raw aging export — with every other field derived from `config.yml` and surfaced as an `ASSUMED:` block for a single correction pass. Grounded in `config.example.yml` (Cherry Creek Family Dental, Denver CO; Dentrix Ascend + DentalXChange clearinghouse; in-network Delta Dental PPO / Cigna DPPO / MetLife PDP Plus; CareCredit + in-house 3-pay; office manager works A/R). Deliberately run on a **partial input** — buckets present, but no timely-filing list, no follow-up history, no write-off policy pasted — so the ASSUMED layer is demonstrated, not described.*
+
+**Sample input:** *"Here's this morning's Dentrix Ascend aging export (CSV). Just tell me what to work this week."* — 41 open lines, columns: chart #, patient, carrier, claim #, DOS, billed, paid, outstanding, bucket. No other fields provided.
+
+> **`ASSUMED:` (derived from `config.yml` — correct any line and I'll re-render)**
+> • **Timely-filing windows** — Delta Dental PPO **90-day initial / 180-day appeal**; Cigna DPPO 180-day; MetLife PDP Plus 12-month. Two carriers in your report are **not** in `config.insurance.in_network_plans` — **UnitedHealthcare** and **Anthem BCBS** — both flagged `VERIFY filing window` below, not guessed.
+> • **A/R split** — export has no insurance/patient flag; inferred from open-claim status. 28 lines insurance A/R, 13 patient A/R.
+> • **Follow-up history** — none pasted; assumed no prior work this cycle. No rep names or reference numbers invented.
+> • **Payment plans** — 2 patient balances match the in-house 3-pay profile (> $1,000, recent DOS); stamped `ASSUMED: on 3-pay — confirm` and set to **HOLD**, not dunned.
+> • **Write-off policy** — none pasted; using standing conservative default: < $25 = auto-write-off *candidate*; everything else stays a candidate for owner sign-off. Nothing is written off by this skill.
+
+> ### 🔴 WORK FIRST — Bucket E, filing-cliff ≤ 14 days, balance > $500
+> | Chart | Pt | Carrier | Claim | Bal | Bucket | Pri | Action | Due | Note to paste in PMS |
+> |---|---|---|---|---|---|---|---|---|---|
+> | 10442 | R.M. | Delta PPO | 88231 | $1,940 | E (118d) | 9.6 | **APPEAL** | **Thu 7/23** | D2740 crown LEAT-downgraded to D2751; 180-day appeal window closes **8/6** — appeal + radiograph this week. → `insurance-denial-appeal` |
+> | 10771 | J.K. | UHC | 90114 | $860 | E (121d) | 8.8 | **RESUB** | Thu 7/23 | `VERIFY filing window` before resubmit — UHC not in config; clearinghouse shows rejected-never-received. Resubmit w/ attachment. |
+>
+> ### 🟠 Bucket D — high balance
+> | 10588 | A.T. | Cigna | 89902 | $1,220 | D (104d) | 7.9 | **CALL** | Tue 7/21 | "In process" 40+ days — get rep name, ref #, commitment date. |
+> | 10203 | P.S. | MetLife | 87740 | $612 | D (98d) | 6.4 | **DOC** | Wed 7/22 | Pended for perio chart on D4341 — attach 6-pt charting + narrative. |
+>
+> ### 🟡 Bucket C — CALL / APPEAL · 🟢 Bucket B — first touch *(full lines in worklist.csv)*
+> ### 👤 Patient A/R — by statement stage *(2 lines on HOLD per payment-plan ASSUMED above)*
+> ### ⚪ Auto-write-off candidates for batch approval — 3 lines, total $46 *(owner sign-off required)*
+
+> **Executive summary (one-pager):** Days-in-A/R **52** (above the 50 red-flag line — trending). >90-day A/R **13.4%** of total (above 12% red-flag). Total A/R $71.3K. **Systemic red flag:** Delta Dental carries **$11.2K in the 91+ bucket** — that's a pattern (LEAT crown downgrades), not a one-off; recommend an owner conversation about a batched Delta crown-downgrade appeal rather than one-at-a-time. Top payer issue: D2740 → D2751 LEAT downgrades (4 claims, $6.1K).
+
+> **Biller daily plan:** **Mon** — the two Bucket E cliff cases (10442 appeal prep, 10771 verify+resubmit). **Tue** — Bucket D/C payer calls (10588 lead). **Wed** — RESUB/REBILL/DOC (10203 perio chart). **Thu** — patient A/R statements + the two HOLD confirmations. **Fri** — batch, reconcile, re-pull aging.
+
+---
+
+**Most common failure mode:** treating the aging export as complete and silently applying a generic "90-day" rule to *every* carrier — the UHC and Anthem lines don't follow Delta's window, and a wrong write-off on a still-collectible claim is unrecoverable revenue. The fast path's discipline is that **an unknown carrier is flagged `VERIFY`, never guessed**, and **nothing is written off by the skill** — it only produces the candidate list for owner sign-off. Close behind: dunning a patient who is already on the in-house 3-pay (config lists it) — which is why matched balances go to HOLD with a confirm stamp, not to a statement run.
+
+## Version History
+
+- **v1.1 (2026-07-20)** — Added a **fast-path rule** to Required Input: only 1 of the 6 fields (the aging export) is blocking; the other five are derived from `config.yml` (in-network carriers → timely-filing windows, in-house 3-pay → payment-plan HOLDs, conservative standing write-off default) and surfaced as a correctable `ASSUMED:` block instead of a six-question intake. Unknown carriers are flagged `VERIFY filing window`, never guessed. Populated the placeholder Example Output with a config-grounded worked run on a **partial** input (demonstrating the ASSUMED layer, the Delta LEAT-downgrade systemic flag, the payment-plan HOLD, and the write-off-candidate-only discipline) plus a most-common-failure-mode callout. Additive only; no instruction prose removed. `last_eval_score` populated.
