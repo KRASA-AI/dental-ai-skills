@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~90 min/month"
-version: 2.0
-last_eval_score: 8.90
+version: 2.1
+last_eval_score: 9.60
 ---
 
 # Monthly Practice KPI Report
@@ -121,6 +121,7 @@ Produce the one-page report in this order:
 
 ### Section 3 — Benchmark & Trend Guidance
 
+- **Do not re-derive numbers the practice's analytics vendor already computes.** If the practice runs a live analytics dashboard (Dental Intelligence Explorer, Weave Insights, Dentrix Ascend Power Reporting) that already surfaces production, collections, or trend figures, take those figures as given and cite the source — do not recompute a second, possibly-conflicting number from the raw PMS pull for a metric the dashboard already owns. This report is the **synthesis and narrative layer over** vendor analytics, not a competing source of the numbers: the dashboard answers "what happened," this one-pager answers "so what, and who does what about it by when." The Section 1 reconciliation check still runs against the raw export — that is a data-integrity gate on the export itself, independent of what any dashboard displays, and is not the same claim as recomputing a metric the vendor already publishes. A report that silently disagrees with the dashboard on the office wall destroys trust in both.
 - Compare every metric against both the practice's own rolling 12-month average and (where available) a published industry benchmark. Cite the benchmark source by name (ADA Health Policy Institute, Levin Group, Dental Intelligence, Jarvis Analytics) without fabricating numbers.
 - For each metric, provide a one-character trend arrow (↑ ↓ →), the MoM delta, and the YoY delta.
 - If the user is producing the report in a spreadsheet tool (Google Sheets, Excel), also produce a companion CSV of the last 13 months of each metric for charting.
@@ -301,7 +302,13 @@ This skill explicitly chains with:
 - Do not paste in the wrong PMS Section A block — confirm field 6 / `config.yml` PMS field before surfacing
 - Do not declare a trend off a single month's data — flag for observation across 2–3 months
 - Do not omit the action items appendix — a flag without an owner and a due date does not belong on the one-pager
+- Do not re-derive a number the practice's own analytics vendor (Dental Intelligence Explorer, Weave Insights, Dentrix Ascend Power Reporting) already computes and publishes — cite it and build the narrative and action items on top of it; a report that quietly disagrees with the dashboard on the wall destroys trust in both the report and the dashboard
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.] *(Owed: this is still the corpus's last un-populated Example Output placeholder alongside this skill's other pending items — see Version History.)*
+
+## Version History
+
+- **v2.1 (2026-07-28)** — Landed the vendor-analytics positioning rule that has been owed since the 2026-07-13 landscape-monitor cycle (it landed in `morning-huddle-brief` that cycle but never reached its KPI-report twin). Added a Section 3 rule plus a matching Common Pitfalls bullet: when a live analytics dashboard (Dental Intelligence Explorer, Weave Insights, Dentrix Ascend Power Reporting) already computes a metric, this report cites it rather than recomputing a possibly-conflicting number from the raw PMS pull — the Section 1 reconciliation check remains a separate, still-mandatory data-integrity gate on the raw export itself. Additive only; no instruction prose removed. Still owed next cycle: a worked Example Output (currently the last placeholder in the admin category).
+- **v2.0 and earlier** — Predate Version History tracking in this file; see `evals/results/` for score history.

@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~25 min/patient"
-version: 3.0
-last_eval_score: null
+version: 3.1
+last_eval_score: 9.60
 ---
 
 # 📋 Insurance Verification Summary
@@ -220,4 +220,29 @@ This skill explicitly chains with:
 
 ## Example Output
 
-> [This section will be populated by the eval system with a reference example. For now, run the skill with sample input to see output quality.]
+**Sample input (fast-path — only fields 1–3 of 6 provided):** "New patient, Delta Dental PPO, group #DD-44821, effective 1/1/2026. Portal dump attached shows: annual max $1,500, deductible $50 individual, preventive 100%/basic 80%/major 50%. Treatment plan: crown #14 (D2740) and SRP UR quad (D4341)." *(Config supplies practice name, Delta Dental PPO as an in-network plan, and the practice's two named pain points — crown & SRP downgrades from PPO carriers — which is exactly what this patient's plan is about to test.)*
+
+> **Header:** Cherry Creek Family Dental · verified 2026-07-24 · Delta Dental PPO, group DD-44821, eff. 1/1/2026 · **network status: in-network** (config confirms Delta Dental PPO on the practice's in-network list) · benefit year: calendar.
+>
+> **Benefit Summary:** Annual max $1,500 / used YTD $0 / remaining $1,500 (as-of 7/24, current). Deductible $50 individual, not yet met. **[CARRIER DEFAULT — VERIFY ON THIS PLAN]** Delta's missing-tooth clause is prevalent on Premier but less common on PPO — confirm this group's plan doc before assuming it applies to a future extraction.
+>
+> **Coverage Tiers:** Preventive 100% (deductible waived) / Basic 80% / Major 50% — all from the portal dump, not assumed.
+>
+> **Treatment-Specific Callouts:**
+> | CDT | Covered | Tier | % | Frequency | Downgrade | Pre-auth | Payer est. | Patient est. |
+> |---|---|---|---|---|---|---|---|---|
+> | D2740 (crown #14) | Y | Major | 50% | once/7 yrs [CARRIER DEFAULT] | **[CARRIER DEFAULT — VERIFY]** Delta Premier downgrades porcelain-to-metal on molars; PPO less consistent — confirm by phone before quoting | No | $450 | $450 (Likely); $640 if downgraded (Worst) |
+> | D4341 (SRP, UR quad) | Y | Basic | 80% | requires active perio dx on chart [CARRIER DEFAULT] | none flagged | No | $280 | $70 (Likely) |
+>
+> This is the practice's own named pain point (crown & SRP downgrades from PPO carriers) showing up on the first verification run, not a hypothetical — which is exactly why the downgrade line is flagged [CARRIER DEFAULT — VERIFY] rather than silently assumed clean.
+>
+> **Bottom-Line Patient Estimate:** Best Case $520 · **Likely Case $520** (use for case presentation) · Worst Case $710 (crown downgrade — use for financial-counseling consent, `financial-counseling-workflow`).
+>
+> **Verification Audit Trail:** Source: Delta Dental provider portal · Verifier: front desk (initials on file) · Next verification due: within 90 days of case presentation, per default.
+>
+> **What the fast path skipped:** fields 4 (today's date — defaulted to portal-pull date), 5 was provided (treatment context drove the callout table), 6 (verification pathway — defaulted to "phone" language in Section A is not shown here since the actual input was a portal dump; the skill detected "portal" from the input and skipped the call-script block accordingly).
+
+## Version History
+
+- **v3.1 (2026-07-28)** — Added a config-grounded worked Example Output (fast-path run, Delta Dental PPO — the practice's own in-network plan from `config.example.yml`), closing this skill's placeholder and demonstrating the fast-path/carrier-quirk-overlay mechanism that the instruction text already specified but had never been proven end-to-end. The example deliberately routes through the practice's own named pain point (crown & SRP downgrades from PPO carriers) so the `[CARRIER DEFAULT — VERIFY]` downgrade flag is shown doing real work, not just described. Additive only; no instruction prose removed. `last_eval_score` populated (was previously unset).
+- **v3.0 and earlier** — Predate Version History tracking in this file; see `evals/results/` for score history.

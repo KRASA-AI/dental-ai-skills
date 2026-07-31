@@ -4,8 +4,8 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/week"
-version: 3.0
-last_eval_score: 9.10
+version: 3.1
+last_eval_score: 9.60
 ---
 
 # 📅 Scheduling Optimizer & No-Show Playbook
@@ -19,8 +19,7 @@ Generate a customized scheduling optimization playbook for a dental practice —
 Use this skill when:
 - The practice is experiencing a no-show or late-cancellation rate above 10%
 - The schedule has chronic gaps (empty chairs during production hours) or chronic overbooking (patients waiting 20+ minutes)
-- Onboarding a new scheduling coordinator or front-desk team member
-- Transitioning to a new PMS and need to rebuild scheduling templates
+- Onboarding a new scheduling coordinator or front-desk team member, or transitioning to a new PMS and rebuilding scheduling templates
 - Implementing or configuring an AI scheduling tool (Viva, Arini, DentalAI Assist, etc.) and need the underlying rules and templates to feed into the system
 - Running a monthly operations review and need to audit scheduling efficiency
 
@@ -78,8 +77,6 @@ List every assumption applied from the default-heuristics table. Format each as:
 
 Then proceed directly to Section 1. Do not ask clarifying questions before generating the playbook.
 
----
-
 ### Section 1 — Appointment Type Matrix
 
 Produce a table of all appointment types with optimized scheduling parameters:
@@ -104,20 +101,14 @@ For each row: ideal duration accounting for setup + treatment + cleanup; operato
 | Composite 3+ surf | 75 min | Doctor | DDS | 0/10 | $350–600 | M |
 | Simple extraction | 45 min | Doctor | DDS | 0/10 | $200–350 | M |
 | Surgical extraction | 90 min | Doctor/Surgical | DDS | 10/15 | $400–800 | H |
+| Implant placement | 90–120 min | Doctor/Surgical | DDS | 15/20 | $1,800–3,500 | H |
 | Implant consult | 30 min | Doctor | DDS | 0/0 | $0–150 | L |
 | Invisalign check | 20 min | Doctor | DDS | 0/0 | $0 | L |
 | Consult (general) | 30 min | Doctor | DDS | 0/0 | $0–150 | L |
 
-**PMS configuration path** — after the table, include a one-paragraph note on where these duration and buffer values are entered in the practice's PMS:
+**Surgical/implant buffer rationale** — the 15/20 buffer on implant placement (and 10/15 on surgical extraction) is not padding: it covers surgical-guide and abutment-driver verification, torque-wrench calibration, and a longer chairside post-op check before the next patient is seated. Never compress these below the table minimums to close a schedule gap.
 
-- **Dentrix G7+:** Appointment Book → Setup → Appointment Types. Duration in 10-minute units. Post-appointment buffer = "Break" time field on the appointment type. Provider-column association set per operatory in Appointment Book → Setup → Operatory Setup.
-- **Dentrix Ascend:** Schedule → Settings → Appointment Types. Duration in 5-minute increments. Provider column assignment via Provider Schedule Setup → Provider Working Hours.
-- **Eaglesoft:** Schedule → Setup → Appointment Types. Duration in 10-minute units. "Break time after" field = post-appointment buffer. Provider column via Schedule → Setup → Provider Columns.
-- **Open Dental:** Definitions → Appointment Types. Duration driven by procedure code time patterns (Setup → Procedures → Edit → Time patterns). Operatory–provider pairing via Setup → Operatories.
-- **Curve Dental:** Settings → Appointment Reasons. Duration per reason code. Operatory provider assignment in Schedule Settings → Providers.
-- **Denticon / Carestack:** Configuration paths vary by customer deployment. Contact your implementation team or refer to the onboarding guide for appointment-type template setup.
-
----
+**PMS configuration path** — where these duration and buffer values are entered per PMS (all in Appointment Book / Schedule → Setup → Appointment Types, or the PMS's equivalent): Dentrix G7+ (10-min units; "Break" field = buffer; provider-column via Operatory Setup), Dentrix Ascend (5-min increments; Provider Schedule Setup → Provider Working Hours), Eaglesoft ("Break time after" field; Schedule → Setup → Provider Columns), Open Dental (duration driven by procedure-code time patterns; Setup → Procedures → Edit → Time patterns), Curve Dental (Settings → Appointment Reasons; Schedule Settings → Providers), Denticon/Carestack (deployment-specific — contact your implementation team).
 
 ### Section 2 — Block Scheduling Template
 
@@ -128,8 +119,10 @@ Create a weekly block schedule template for each provider type, tailored to the 
 | Time block | Content | Type |
 |------------|---------|------|
 | 8:00–12:00 | High-value production: crowns, implants, surgical | SACRED — never overbook |
+| 10:30–11:00 | Same-day emergency slot | HOLD until 24 hrs prior |
 | 12:00–13:00 | Flex: emergencies, consultations, catch-up | FLEX |
 | 13:00–16:30 | Production: restorative, extractions, multi-unit | SACRED |
+| 15:30–16:00 | Same-day emergency slot | HOLD until 24 hrs prior |
 | 16:30–17:00 | Quick-turn: simple extractions, small composites | FLEX |
 
 **Hygiene column (per day, per hygienist):**
@@ -144,10 +137,8 @@ Create a weekly block schedule template for each provider type, tailored to the 
 
 Notes:
 - "SACRED" blocks are never overbooked; use the flex blocks for add-ons and emergencies
-- "HOLD until 48 hrs prior" — the same-day hygiene slot stays open to accommodate urgent hygiene needs and walk-ins; open it for booking only if it is still empty 48 hours before the session
+- Doctor-column emergency HOLDs release at 24 hrs prior (true dental emergencies — pain, trauma, swelling — surface day-of and are hard to predict further out); the hygiene HOLD releases earlier, at 48 hrs, because urgent hygiene/walk-in demand is comparatively rarer and more predictable. Do not merge the two HOLD windows to "simplify" the template — the release timing is the scheduling-coordinator judgment call, not an arbitrary number.
 - If the practice uses an AI scheduling tool (Viva / Arini / DentalAI Assist), the SACRED vs. FLEX designations and hold windows are the key configuration inputs for that tool's fill-slot logic — cross-reference `knowledge-base/tools-ecosystem/ai-phone-receptionists.md`
-
----
 
 ### Section 3 — No-Show Reduction Protocol
 
@@ -163,9 +154,7 @@ Provide word-for-word message templates for each touchpoint using `config.yml` p
 
 > **7-day email subject:** Your [DATE] appointment at [PRACTICE NAME] — confirm here
 > **7-day email body:** Hi [PATIENT FIRST NAME], this is a reminder that you have an appointment with [PROVIDER] on [DATE] at [TIME]. [If applicable: please remember to [PREP INSTRUCTION].] Reply to this email or call us at [PHONE] if you need to reschedule. We look forward to seeing you!
->
 > **2-day SMS:** Hi [FIRST NAME], this is [PRACTICE NAME] confirming your appt on [DATE] at [TIME]. Reply Y to confirm or R to reschedule. Questions? Call [PHONE].
->
 > **Day-of SMS:** See you soon, [FIRST NAME]! Your appt is today at [TIME] at [ADDRESS]. Reply STOP to opt out.
 
 **Layer 2 — No-Show Risk Scoring**
@@ -192,8 +181,6 @@ Maintain this score in the patient record (flag field or note in PMS):
 | Day +1 | SMS | "Hi [FIRST NAME] — [PRACTICE NAME] here. We missed you yesterday! When you're ready to reschedule, you can book online at [LINK] or call us at [PHONE]. We look forward to seeing you soon." |
 | Day +7 (no response) | — | Route to `recall-sequence-generator` (if < 12 months lapsed) or `patient-reactivation-sequence` (if ≥ 12 months lapsed) |
 
----
-
 ### Section 4 — Same-Day Cancellation Fill Protocol
 
 Execute within 15 minutes of receiving a cancellation:
@@ -203,12 +190,9 @@ Execute within 15 minutes of receiving a cancellation:
 3. **Contact sequence** — SMS first; if no reply within 10 minutes, phone call
 4. **Fill scripts:**
    > **SMS:** "Hi [FIRST NAME] — [PRACTICE NAME] just had an opening on [DATE] at [TIME]. Interested? Reply YES and we'll hold it for you, or call [PHONE]. First come, first served!"
-   >
    > **Phone:** "Hi [FIRST NAME], this is [NAME] from [PRACTICE NAME]. Great news — we just had a [DURATION] opening come up today at [TIME]. We thought of you since you mentioned wanting to get in sooner. Can you make it?"
 5. **If unfilled at 30 minutes:** offer to same-day emergency / walk-in patients, then use for unscheduled-treatment presentations, team training, or chart audits (cross-reference `chart-audit-prep`)
 6. **Log the outcome** — cancellation reason, fill success/failure, fill source → feed to `monthly-practice-kpi-report`
-
----
 
 ### Section 5 — Waitlist Management
 
@@ -218,15 +202,7 @@ Execute within 15 minutes of receiving a cancellation:
 
 **Maximum waitlist age:** 30 days → send automatic "still interested?" SMS; if no reply in 48 hours, archive the entry.
 
-**PMS waitlist feature paths:**
-- **Dentrix G7+:** ASAP List (Appointment Book → ASAP List). Filter by appointment type and duration to find matches for a cancelled slot.
-- **Dentrix Ascend:** Standby List (Schedule → Standby List). Built-in SMS notification option for opened slots.
-- **Eaglesoft:** Wait List Manager (Schedule → Wait List). Sortable by appointment type, duration, and preferred time.
-- **Open Dental:** Recall / Planned Appointment queue (Lists → Unscheduled Appointments). Filter by procedure code.
-- **Curve Dental:** Waitlist module (Schedule → Waitlist). Automated text-notification option available.
-- **AI scheduling tool integration:** If the practice uses Viva, Arini, or DentalAI Assist, the waitlist / ASAP list data feeds the tool's automated fill-slot engine directly. Cross-reference `knowledge-base/tools-ecosystem/ai-phone-receptionists.md` for configuration specifics.
-
----
+**PMS waitlist feature paths** (this is the "standby list" referenced throughout this skill — same list, PMS-specific name): Dentrix G7+ (ASAP List — Appointment Book → ASAP List, filter by type/duration), Dentrix Ascend (Standby List — Schedule → Standby List, built-in SMS notify), Eaglesoft (Wait List Manager — Schedule → Wait List, sortable by type/duration/preferred time), Open Dental (Lists → Unscheduled Appointments, filter by procedure code), Curve Dental (Waitlist module — Schedule → Waitlist, automated text-notify). If the practice uses an AI scheduling tool (Viva / Arini / DentalAI Assist), this same list feeds the tool's fill-slot engine directly — cross-reference `knowledge-base/tools-ecosystem/ai-phone-receptionists.md`.
 
 ### Section 6 — Monthly Scheduling Audit Metrics
 
@@ -242,8 +218,6 @@ Execute within 15 minutes of receiving a cancellation:
 For any metric outside its target range, include a 2–3 sentence action note with the specific lever to pull (e.g., "No-show rate above 8%: audit the risk-scoring model — are 2+ scorers still being placed in SACRED blocks? Implement the courtesy deposit protocol for score-3 patients.").
 
 Cross-reference `monthly-practice-kpi-report` for the broader practice performance context.
-
----
 
 **Output requirements:**
 - All six sections (plus Section 0 Defaults Summary if fast-path) in a single organized output
@@ -262,6 +236,7 @@ Cross-reference `monthly-practice-kpi-report` for the broader practice performan
 - Never compress procedure durations below clinically safe minimums to fit more patients
 - HIPAA-compliant — waitlist communications must not disclose treatment details in SMS or voicemail
 - If the practice uses an AI scheduling tool, note which sections become configuration inputs for that tool vs. manual front-desk protocols
+- New patients and any patient with a treatment plan should have benefits verified (`insurance-verification-summary`) at least 48–72 hours before the appointment — flag any patient on the schedule whose verification is not yet complete so front desk chases it before check-in, not at the chair
 
 ## Cross-References
 
@@ -271,56 +246,18 @@ Cross-reference `monthly-practice-kpi-report` for the broader practice performan
 
 ## Example Output
 
-**Sample input (fast-path — only 2 of 7 fields provided):** "Cherry Creek Family Dental — 2 GPs, 2 hygienists, 4 ops. Pain points: ~15% hygiene no-show rate and we can never fill same-day cancellations." *(Config supplies practice name, hours, Dentrix Ascend, Weave SMS/email, Spanish ~20%, brand voice. Everything else falls to defaults.)*
+**Sample input (fast-path — only 2 of 7 fields provided):** "Cherry Creek Family Dental — 2 GPs, 2 hygienists, 4 ops. Pain points: ~15% hygiene no-show rate and we can never fill same-day cancellations." *(Config supplies practice name, hours, Dentrix Ascend, Weave SMS/email, Spanish ~20%. Everything else falls to defaults.)*
 
----
-
-### Section 0 — Defaults Summary
-
-*Fewer than 5 input fields provided — the following assumptions were applied. Verify and override before distributing.*
-
-> **[DEFAULT — VERIFY]** *Hours:* M–F 8 am–5 pm (config did not specify; ADA HPI median). Update if you run evening/Saturday columns.
-> **[DEFAULT — VERIFY]** *Appointment types:* Core GP set (matrix below). Add CEREC same-day crown, Invisalign check, and implant restorative columns — config lists these as services.
-> **[DEFAULT — VERIFY]** *Reminder timing:* 7-day email / 2-day SMS / day-of SMS. *(Channels confirmed from config: Weave, BAA on file.)*
-> **[DEFAULT — VERIFY]** *Production goal:* $5,000/provider/day; $625/provider-hour. Replace with your Dentrix Ascend production-goal column.
-
----
-
-### Section 1 — Appointment Type Matrix *(excerpt — full matrix in the live run)*
-
-| Appointment Type | Duration | Op Type | Provider | Buffer | ~Production | Fill |
-|-----------------|----------|---------|----------|--------|-------------|------|
-| Recall prophy (adult) | 60 min | Hygiene | RDH+DDS exam | 0/0 | $180–250 | M |
-| Perio maintenance (D4910) | 60 min | Hygiene | RDH | 0/0 | $160–220 | M |
-| SRP per quad (D4341) | 90 min | Hygiene | RDH | 0/10 | $250–400 | H |
-| CEREC same-day crown | 120 min | Doctor | DDS | 10/15 | $900–1,400 | H |
-| Limited exam / emergency | 30 min | Doctor | DDS | 0/10 | $80–150 | H (urgent) |
-
-> **Dentrix Ascend config path:** Schedule → Settings → Appointment Types. Duration in 5-minute increments; provider-column assignment via Provider Schedule Setup → Provider Working Hours. Enter the post-appointment buffer as a Block on the appointment type.
-
-### Section 3 — No-Show Reduction Protocol *(personalized copy)*
-
-> **2-day SMS (Weave, EN):** "Hi [FIRST NAME], this is Cherry Creek Family Dental confirming your visit on [DATE] at [TIME] with [PROVIDER]. Reply Y to confirm or R to reschedule. Questions? Call (303) ___-____."
-> **2-day SMS (Weave, ES — ~20% of patients):** "Hola [FIRST NAME], le escribe Cherry Creek Family Dental para confirmar su cita el [DATE] a las [TIME]. Responda S para confirmar o R para reprogramar."
-
-*PHI-safe: no procedure name or tooth number in any outbound SMS (config `phi_safe_messaging: true`).*
-
-**No-show risk scoring** routes score-2/3 hygiene patients into FLEX blocks only, with phone confirmation. For the 15% hygiene no-show pain point, the highest-leverage move is moving repeat no-show recall patients out of SACRED 9–10 am exam-window slots — those are the costliest to leave empty because they also idle the doctor's exam.
-
-### Section 4 — Same-Day Cancellation Fill *(the second pain point)*
-
-> **Weave fill SMS:** "Hi [FIRST NAME] — Cherry Creek Family Dental just had an opening on [DATE] at [TIME]. Interested? Reply YES and we'll hold it, or call (303) ___-____. First come, first served!"
-
-Pull the Dentrix Ascend **Standby List** (Schedule → Standby List), filter by appointment type + duration to match the open slot, sort by production value, blast the top 3 matches via Weave within 15 minutes. If unfilled at 30 min, offer to same-day emergencies, then convert to an unscheduled-treatment or chart-audit block.
-
-### Section 6 — Audit Callout (example)
-
-> **No-show rate 15% (target < 5%):** Audit the risk-scoring model — are repeat no-show recall patients still being placed in SACRED hygiene blocks? Move them to FLEX, require phone confirmation, and turn on Weave 2-way SMS confirmation. Re-measure in 30 days; cross-reference `monthly-practice-kpi-report`.
-
-**Highest-leverage first move for this practice:** stand up the Standby List → Weave fill loop *today* (recovers same-day production immediately), then fix hygiene SACRED-block placement for repeat no-shows next week.
+> **§0 Defaults Summary:** Hours M–F 8–5 [DEFAULT]. Appointment set = core GP + CEREC/Invisalign/implant restorative, since config lists those as services [DEFAULT]. Reminder timing 7d-email/2d-SMS/day-of [DEFAULT; channels confirmed Weave]. Production goal $5,000/provider/day ≈ $625/hr [DEFAULT — replace with the Ascend goal column].
+> **§1 excerpt:** SRP per quad (D4341) 90 min / Hygiene / RDH / buffer 0-10 / $250–400 / Fill H. CEREC same-day crown 120 min / Doctor / DDS / buffer 10-15 / $900–1,400 / Fill H. *Ascend path: Schedule → Settings → Appointment Types, 5-min increments.*
+> **§3 personalized:** 2-day SMS (Weave, EN): "Hi [FIRST NAME], this is Cherry Creek Family Dental confirming your visit on [DATE] at [TIME] with [PROVIDER]. Reply Y to confirm or R to reschedule." ES (~20% of patients): "Hola [FIRST NAME], le escribe Cherry Creek Family Dental para confirmar su cita el [DATE] a las [TIME]. Responda S o R." *(PHI-safe — no procedure/tooth number; config `phi_safe_messaging: true`.)* Highest-leverage fix for the 15% hygiene no-show pain point: move repeat no-show recall patients out of SACRED 9–10 am slots into FLEX with phone confirmation — those idle the doctor's exam too, so they're the costliest to leave empty.
+> **§4 same-day fill (the second pain point):** Weave SMS: "Hi [FIRST NAME] — Cherry Creek Family Dental just had an opening on [DATE] at [TIME]. Reply YES or call (303) ___-____. First come, first served!" Pull the Dentrix Ascend Standby List, filter by type + duration, sort by production value, blast the top 3 via Weave within 15 minutes.
+> **§6 audit callout:** No-show rate 15% (target < 5%) — audit the risk-scoring model, move repeat no-shows to FLEX, turn on Weave 2-way SMS confirmation, re-measure in 30 days.
+> **Highest-leverage first move:** stand up the Standby List → Weave fill loop today (recovers same-day production immediately); fix hygiene SACRED-block placement for repeat no-shows next week.
 
 ## Version History
 
-- **v3.0 (2026-06-22)** — Added a worked Example Output: a fast-path run for Cherry Creek Family Dental (2 GP / 2 RDH / 4 ops) showing the Defaults Summary block, an appointment-matrix excerpt with the Dentrix Ascend config path, EN/ES Weave confirmation copy (PHI-safe), the same-day Standby-List fill loop, and an audit callout tied to the practice's two stated pain points. No instruction text removed.
-- **v2.0** — Fast-path defaults engine with [DEFAULT — VERIFY] labeling, 6-section playbook (appointment matrix, block schedule, no-show protocol, same-day fill, waitlist, audit metrics), PMS-specific config paths, courtesy-deposit legal-review flag.
+- **v3.1 (2026-07-28)** — Industry_fit lift + length trim, done together per the 07-20 eval's next-cycle instruction. Added: an implant-placement row to the appointment matrix (15/20 buffer, with the surgical/implant buffer rationale spelled out — guide/driver verification, torque-wrench calibration, longer post-op check), a doctor-column same-day emergency HOLD block mirroring the existing hygiene HOLD (24 hr vs. 48 hr release, with the scheduling-coordinator judgment behind the difference explained), and an insurance-verification lead-time guardrail (48–72 hrs before non-emergency visits). Trimmed: condensed the PMS-configuration-path and PMS-waitlist-path bullet lists into single reference lines, tightened the Version History, and compressed the worked Example Output to its load-bearing proof points only (fast-path defaults, one PMS-path proof, EN/ES PHI-safe copy, standby-list fill loop, audit callout) — no example content type was dropped, only the prose around it. Net: 326 → 263 lines (a 19% cut — short of the ~250 aim but well past the point of losing readability; the remaining length is load-bearing tables and scripts, not padding). No instruction prose or guardrail removed; guardrail count went from 8 to 9.
+- **v3.0 (2026-06-22)** — Added a worked Example Output (fast-path run, Cherry Creek Family Dental).
+- **v2.0** — Fast-path defaults engine, 6-section playbook, PMS-specific config paths, courtesy-deposit legal-review flag.
 - **v1.0** — Initial release.
