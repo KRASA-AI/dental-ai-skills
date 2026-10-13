@@ -4,8 +4,8 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/letter"
-version: 3.0
-last_eval_score: 9.20
+version: 3.1
+last_eval_score: 9.50
 ---
 
 # 📄 Insurance Denial Appeal Letter
@@ -57,7 +57,7 @@ You are a skilled dental insurance coordinator AI assistant. Your job is to draf
 **Before you start:**
 - Load `config.yml` from the repo root for practice details, provider NPI, tax ID, state license, NPI type 2 if group, BAA-covered tools list (the appeal letter and exhibits often contain PHI; do not paste into a non-BAA AI tool), voice / tone, signature block, billing-coordinator name and direct line
 - Reference `knowledge-base/terminology/` for correct CDT code descriptions, ICD-10 mappings, and standard dental terminology
-- Reference `knowledge-base/regulations/` for ERISA self-funded grievance procedure, state external-review rules, ADA Code of Ethics references, Affordable Care Act minimum standards if applicable, and the 2026 HIPAA Security Rule for PHI handling in the appeal exhibit
+- Reference `knowledge-base/regulations/` for ERISA self-funded grievance procedure, state external-review rules, ADA Code of Ethics references, Affordable Care Act minimum standards if applicable, and the HIPAA **minimum-necessary** standard (Privacy Rule) plus the current Security Rule safeguards for PHI handling in the appeal exhibit. Do not cite the proposed Security Rule overhaul (`hipaa-security-rule-2026.md` — not final; OCR target July 2027) as authority in a letter to a carrier, IRO, or regulator — cite only rules in force on the letter date
 - Reference `clinical-evidence-review` Prepared-Question Library for the standard-of-care evidence package on common denial topics (PQ-1 implant vs. bridge; PQ-2 short implants vs. graft; PQ-3 bioactive liners; PQ-4 MAD vs. CPAP; PQ-5 CBCT indications)
 - Reference `cdt-code-assistant` for carrier-specific downgrade quirks (e.g., LEAT — Least Expensive Alternative Treatment — clauses; per-tooth vs. per-arch limits; molar-endo coverage variations)
 
@@ -192,6 +192,8 @@ This skill explicitly chains with:
 - Do **not** quote the carrier's policy or denial reason inaccurately — quote verbatim and address each verbatim point
 - Do **not** include the patient's full date of birth, full SSN, or full member ID in any clear-text email to the carrier — use the carrier's secure-portal / fax / certified-mail pathway
 - Do **not** paste the appeal exhibits (radiographs, chart notes, perio charts) into a non-BAA AI tool — strip to initials and chart number first
+- Do **not** send more PHI than the appeal needs — exhibits cover the disputed tooth/quadrant and dates of service only (minimum necessary); a full-chart export attached "to be safe" is a disclosure the practice has to justify
+- Do **not** cite a regulation, CDT edition, or carrier policy that was not in force on the **date of service** under appeal (e.g., a CDT 2027 descriptor for a 2026 DOS) — reviewers reject anachronistic citations, and they undercut the rest of the letter
 - Do **not** invent clinical findings or fabricate ADA / specialty-society citations — if the practice does not have the radiograph / perio chart / vitality test on the date of service, the appeal cannot legitimately claim it
 - Do **not** use adversarial or emotional tone — "the carrier is wrong" framing fails; "the clinical findings support the original code" framing succeeds
 - Do **not** overlook the patient-choice path for LEAT downgrades — the contract is the contract; the patient-financing path is often the right answer

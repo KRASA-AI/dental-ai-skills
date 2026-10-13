@@ -4,8 +4,8 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~10 min/new patient"
-version: 2.0
-last_eval_score: null
+version: 2.1
+last_eval_score: 9.60
 ---
 
 # 🩺 Pre-Visit Patient Intake Summary
@@ -42,6 +42,17 @@ Provide the following:
 3. **Provider and operatory** — So the summary can be addressed to the right clinician and routed to the correct column
 4. **Any prior chart notes** — For recall patients, the last visit summary and any open treatment plan items
 5. **Practice-specific medical alert rules** — Pre-med protocol thresholds, anticoagulation hold policy, sedation fasting requirements, pregnancy radiograph policy
+
+### Fast path — what actually blocks
+
+Only **#1 (intake content)** and **#2 (appointment type + planned procedures)** block. Everything else derives from `config.yml` or a conservative default, rendered as a correctable `ASSUMED:` block at the top of the card:
+
+- **Provider / operatory (#3)** → match the provider name against `config.yml → team.providers` (e.g., Dr. Anna Patel, Dr. Marcus Lee). If the schedule line names no operatory, write `Op: —` rather than guessing. **Name-collision rule:** if an outside physician in the intake shares a surname with a practice provider (a cardiologist "Dr. Lee" vs. associate Dr. Marcus Lee), always label the outside clinician by specialty — "Dr. Lee (cardiology, outside)" — so the team never reads a medical clearance as an in-house note.
+- **Alert routing** → the PMS named in `config.yml → tools.pms` (Dentrix Ascend for Cherry Creek) holds the medical-alert banner of record. End the card with "Confirm banner in Dentrix Ascend matches RED items" rather than a generic "check the PMS."
+- **Language** → if `voice.languages` includes Spanish and the intake was completed in Spanish, quote the chief complaint in the original language plus an English gloss; never summarize only the translation.
+- **Pediatric / guardian** → for patients under 18 (≈25% of Cherry Creek's base), add a "Guardian on file / consent signer" line; a missing guardian signature is a YELLOW flag.
+- **Practice clinical policies (#5)** → `config.yml` usually does not hold pre-med, anticoagulation-hold, or pregnancy-radiograph thresholds. If absent, apply current AHA/ADA guidance as the default and tag each affected flag `[DEFAULT — PRACTICE POLICY NOT ON FILE]` so the provider can correct it once and the practice can add it to config.
+- **AI imaging** → if `tools.ai_diagnostic` is set (Overjet), carry any prior AI-flagged finding only as "AI-flagged, provider-confirmed on [date]" or "AI-flagged, unconfirmed" — never as a diagnosis.
 
 ## Instructions
 
@@ -129,16 +140,17 @@ You are a pre-visit intake summarization AI assistant. Your job is to produce a 
 
 ## Example Output
 
-**Sample input:** Recall patient, annual medical-history update. Intake reports: apixaban 5 mg BID (A-fib, Dr. Lee/cardiology), alendronate 70 mg weekly × 4 yrs (oral, osteoporosis), penicillin allergy (hives), HbA1c 7.8 (May), former smoker. Today: hygiene recall (D4910) + provider exam; chart shows open treatment plan for extraction #18. Provider Dr. Patel, Op 3, 60 min.
+**Sample input:** Recall patient, annual medical-history update. Intake reports: apixaban 5 mg BID (A-fib, Dr. Okafor/cardiology), alendronate 70 mg weekly × 4 yrs (oral, osteoporosis), penicillin allergy (hives), HbA1c 7.8 (May), former smoker. Today: hygiene recall (D4910) + provider exam; chart shows open treatment plan for extraction #18. Provider Dr. Patel, Op 3, 60 min.
 
 ---
 
 > ### 🩺 PRE-VISIT SUMMARY — generated 7:42a (intake updated 7:15a)
+> `ASSUMED:` Provider Dr. Anna Patel (config) · alert banner of record = Dentrix Ascend · pre-med / anticoagulation-hold / radiograph thresholds = AHA/ADA defaults `[DEFAULT — PRACTICE POLICY NOT ON FILE]` · intake language English · adult (no guardian line)
 > **Pt:** J.M. · Chart #4471 · 58 · she/her  **Provider:** Dr. Patel · **Op 3** · Perio maint + exam · 60 min
 >
 > ### 🔴 MEDICAL ALERT — RED
 > **NO ELECTIVE SURGERY TODAY without review.** Two compounding flags for the open #18 extraction:
-> - **Anticoagulant:** apixaban 5 mg BID (A-fib, Dr. Lee). Any surgical step needs a continue/hold decision from cardiology + documentation. *Today's hygiene visit is non-surgical — proceed; do not initiate the extraction today.*
+> - **Anticoagulant:** apixaban 5 mg BID (A-fib, Dr. Okafor — cardiology, outside). Any surgical step needs a continue/hold decision from cardiology + documentation. *Today's hygiene visit is non-surgical — proceed; do not initiate the extraction today.*
 > - **Antiresorptive:** alendronate 70 mg weekly, oral, ~4 yrs → **MRONJ-risk consideration** for #18 extraction. Provider to evaluate risk/benefit and consent before any surgical date is set.
 >
 > ### Medical History Signals
@@ -160,9 +172,10 @@ You are a pre-visit intake summarization AI assistant. Your job is to produce a 
 > - #18: do NOT schedule the surgical date until (a) cardiology anticoagulation guidance and (b) MRONJ risk/benefit consent are documented.
 >
 > ### Team Prep Checklist
-> - [ ] Pre-med: not indicated by current AHA/ADA criteria on this history — **provider to confirm**.
-> - [ ] Physician clearance letter for #18 extraction — request from Dr. Lee; **not yet on file**.
+> - [ ] Pre-med: not indicated by current AHA/ADA criteria on this history `[DEFAULT — PRACTICE POLICY NOT ON FILE]` — **provider to confirm**.
+> - [ ] Physician clearance letter for #18 extraction — request from Dr. Okafor (cardiology, outside); **not yet on file**.
 > - [ ] BP cuff ready in Op 3.
+> - [ ] Confirm the Dentrix Ascend medical-alert banner lists apixaban, alendronate, and the penicillin allergy (banner is the record; this card supplements it).
 > - [ ] Perio-maintenance setup.
 >
 > ### ⚑ Verify with provider (inferred/abbreviated)
