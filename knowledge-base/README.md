@@ -11,6 +11,7 @@ This directory contains industry context that AI assistants reference when runni
 | `regulations/` | Compliance requirements, licensing, safety standards |
 | `best-practices/` | Industry standards and recommended approaches |
 | `tools-ecosystem/` | Common software, platforms, and tools used in dental |
+| `tools-ecosystem/pms-native-ai-agents.md` | PMS-native AI agents and MCP layers (Dentrix Ascend, Planet DDS, Weave) and how skills should position against them |
 
 ## How it's used
 

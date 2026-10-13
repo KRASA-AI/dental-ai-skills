@@ -4,7 +4,7 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~12 min/encounter"
-version: 3.0
+version: 3.1
 last_eval_score: 9.50
 ---
 
@@ -41,6 +41,7 @@ Provide the following:
 4. **Payer context** — Carrier name and plan type (PPO, HMO, Medicaid, Medicare Advantage dental, self-pay, membership plan), in-network status, known plan quirks (missing tooth clause, LEAT, 5-year vs. 7-year crown replacement rule)
 5. **Narrative or ICD-10 crosswalk needs** — Whether a narrative is required, whether ICD-10 pairing is required (most medical-crossover claims do), any carrier-specific narrative templates the practice uses
 6. **Time window context** — If the tooth has a prior restoration with a recent date, flag it — frequency and replacement rules are date-sensitive
+7. **Date of service** — The date the procedure was (or will be) performed. This decides which CDT edition governs the claim, not the date the claim is keyed or submitted. If omitted, assume today's date and say so in an `ASSUMED:` line
 
 ## Instructions
 
@@ -81,7 +82,12 @@ You are a dental coding and billing AI assistant with current CDT code knowledge
    - **D6xxx Implants / Prosth** — Surgical placement (D6010 endosteal, D6013 mini), custom abutment (D6057) vs. stock (D6056), implant crown (D6058–D6067 by material and connection); hybrid/fixed-detachable is D6114/D6115. Ensure the restoration code family matches the abutment
    - **D7xxx Oral Surgery** — Simple extraction (D7140), surgical extraction (D7210 — requires bone removal or sectioning), soft-tissue impaction (D7220), partial-bony (D7230), full-bony (D7240). The note must document what made the extraction surgical, not just the presence of a flap
    - **D9xxx Adjunctive** — Sedation (D9222 first 15 min, D9223 each additional 15 min for deep/general; D9239/D9243 IV; D9248 non-IV conscious). Document time in minutes, provider credentials, monitoring, recovery
-   - **CDT 2025 / 2026 updates** — Verify any new codes, revised descriptors, or retired codes against the current manual before confirming. Flag anything that is potentially a retired code to avoid an outdated-code denial
+   - **Code-set edition by date of service (CDT 2026 → CDT 2027 transition)** — Dates of service through 12/31/2026 are coded from CDT 2026; dates of service on or after **1/1/2027** are coded from CDT 2027 (ADA-approved: 67 changes — 28 additions, 33 revisions, 6 editorial). Apply these rules:
+     - **State the edition** used on every line (`Edition: CDT 2026` or `Edition: CDT 2027`). A treatment plan presented in Q4 2026 for work seated in January 2027 must be re-coded to the 2027 edition before the claim or pre-auth goes out; flag every such line `RE-CODE AT DOS`.
+     - **Never supply a new-for-2027 code number from memory.** When the documented work falls into a CDT 2027 change area, name the change area and mark the line `[CDT 2027 — CONFIRM CODE NUMBER + DESCRIPTOR IN MANUAL]`. Areas that changed: removing a screw-retained implant restoration to access the implant body; healing-cap placement (post-placement, second stage, or after removing an indirect restoration); fixed-splint repair and removal; implant/abutment-retained **interim** fixed dentures for a partially edentulous arch; semi-precision abutments/attachments now split natural-tooth-borne vs. implant-borne; the adjunctive orthodontic section that replaced "harmful habits" (D8210/D8220 revised); neuromodulator administration revised with separate cosmetic vs. therapeutic chemodenervation codes; and a new orofacial-pain injection group (occipital, peripheral, sphenopalatine-ganglion blocks; tendon/ligament and trigger-point injections).
+     - **D2390 (resin-based composite crown) is no longer anterior-only** for 2027 dates of service. For a posterior direct composite crown dated 2027+, D2390 becomes a legitimate option — but expect carriers to alternate-benefit it until their processing systems and fee schedules catch up; flag the downgrade risk.
+     - **Payer adoption lag.** Carriers and the practice's PMS fee schedule load new codes on their own timelines. For any 2027-new or 2027-revised code, add to the checklist: "Confirm carrier accepts this code for DOS ≥ 1/1/2027 and the PMS fee schedule has it loaded."
+     - **Retired / revised descriptors.** Verify any revised descriptor against the edition in force on the date of service; an outdated descriptor or retired code is a preventable denial
 
 5. **Carrier-specific quirks the skill should watch for:**
 
@@ -105,6 +111,8 @@ You are a dental coding and billing AI assistant with current CDT code knowledge
 ## Common Pitfalls To Avoid
 
 - Do **not** suggest a code the CDT manual does not currently list — retired-code denials are common and preventable
+- Do **not** code by the date the claim is prepared — the **date of service** picks the CDT edition. Year-end treatment plans that cross 1/1/2027 are the highest-risk lines for edition mismatch
+- Do **not** fill in a CDT 2027 code number you are not certain of; an invented or misremembered new code is worse than a flagged placeholder the coder confirms in the manual
 - Do **not** invent carrier-specific rules; if a rule is plan-specific, say "verify with the carrier" rather than stating a rule that may be out of date
 - Do **not** mix primary-tooth and permanent-tooth codes for the same procedure family
 - Do **not** recommend D4910 without a documented prior active perio-therapy history (D4341/D4342/D4346) in the chart

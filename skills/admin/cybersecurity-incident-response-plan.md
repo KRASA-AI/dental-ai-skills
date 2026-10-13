@@ -4,7 +4,7 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~12–20 hrs/incident (and avoids ~$250K+ downside in a worst-case ransomware event)"
-version: 1.1
+version: 1.2
 last_eval_score: 9.60
 ---
 
@@ -59,6 +59,14 @@ This skill has two invocation modes, and conflating them is what makes it feel h
 
 **Live-incident mode (responding now).** The *only* additional block that matters is the **specific-incident details** field (time/what's visible/systems affected/backups intact/attacker contacted). Take those five facts and route straight to the severity tier and hour-zero runbook — do not re-collect the config-derivable profile mid-incident.
 
+**Vendor-notified mode (a third party tells you *they* may be compromised).** Use when an outsourced billing / revenue-cycle company, MSP, clearinghouse, or other vendor holding standing credentials into the practice's systems sends a "we are investigating a potential security incident" notice — often before any scope is known, and sometimes after a ransomware group has already named the vendor on a leak site. Blocking input is three facts: the vendor's name and role, **what it can reach** (PMS login, clearinghouse account, payer portals, email, remote-access tool, API/integration tokens), and the date the notice arrived. Route to a **Tier 3 → Tier 2** path with this ordered checklist:
+1. **Preserve first.** Export or screenshot the vendor's user activity in the PMS and portal audit logs and save the vendor's notice and every later message before changing anything.
+2. **Cut the vendor's standing access.** Disable or rotate every account the vendor uses; revoke integration/API tokens and end active sessions — a password change alone does not always kill an open session or a token. Remove stale and departed-staff accounts in the same pass.
+3. **Rotate the practice's own shared credentials** the vendor could have seen (clearinghouse, payer portals, PMS admin) and turn on MFA wherever it is still off.
+4. **Revenue-cycle continuity.** List claims, eligibility checks, payment postings, and appeals the vendor was working, sorted by timely-filing deadline; reassign the ones due inside 30 days to in-house staff (hand the list to `aging-ar-followup-playbook`).
+5. **Staff phishing alert.** Warn the front desk and billing team that follow-on phishing will likely reference real patients, claims, carriers, or "password reset" requests from the vendor.
+6. **Do not presume a breach — and do not presume there isn't one.** Log the notice as a security incident, request the vendor's findings in writing under the BAA, and run the four-factor analysis only once the vendor states whether practice PHI was accessed or acquired. Calendar a follow-up if the vendor goes quiet; the BAA notice clock runs from *their* discovery.
+
 Render the derived profile as an `ASSUMED:` block at the top of the plan. Standing-IRP mode is effectively one-shot from config; live-incident mode is five facts to a runbook.
 
 ## Instructions
@@ -111,7 +119,7 @@ After the incident is closed, the practice must produce and retain:
 - **Customization:** Every state-specific reference must be expanded for the practice's state. Do not output a generic "consult your state law" without identifying the controlling statute and timing.
 - **Severity routing:** Tier 1 vs. Tier 2 vs. Tier 3 must be visually distinct so a stressed user finds the right path in 30 seconds.
 - **Plain language:** Communication templates target 7th–8th grade reading. Internal-use portions can use HIPAA / NIST terminology where it is the precise term.
-- **Mandatory disclaimers.** Every output ends with: (1) "This plan does not replace counsel. Engage breach counsel immediately when PHI is implicated." (2) "Cyber-insurance carriers typically require pre-approved counsel and forensic firms — engaging non-panel vendors may void coverage." (3) "The 2026 HIPAA Security Rule final text and effective date control over any draft language in this plan; verify against the current rule."
+- **Mandatory disclaimers.** Every output ends with: (1) "This plan does not replace counsel. Engage breach counsel immediately when PHI is implicated." (2) "Cyber-insurance carriers typically require pre-approved counsel and forensic firms — engaging non-panel vendors may void coverage." (3) "The HIPAA Security Rule update is still a proposed rule (OCR's regulatory agenda now targets finalization for July 2027); the final text and effective date control over any draft language in this plan — verify against the current rule."
 
 ## Guardrails
 
